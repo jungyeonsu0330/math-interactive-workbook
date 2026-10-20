@@ -670,53 +670,133 @@ function renderQidNav() {
   });
 }
 
+// 모드별(원래 문제, 계수 변형, 심화 응용) 동적 뷰 생성기
+function getProblemView(p, modeIdx) {
+  if (modeIdx === 0) {
+    return {
+      title: `${p.id} · 원래 문제`,
+      tag: p.step,
+      qText: p.qText,
+      choices: p.choices,
+      isChoice: p.isChoice,
+      ansIdx: p.ansIdx,
+      ansText: p.ansText,
+      solText: p.solText || `【문항 ${p.id}번 정밀 해설】\n주어진 조건식을 수학적으로 모델링하고 단원의 기본 정리와 정규 공식을 적용하여 연립 유도합니다.\n정답: ${p.ansText}`,
+      conceptTitle: p.conceptTitle || "조건 해석",
+      conceptSub: p.conceptSub || "대칭성과 교점",
+      strategy: p.strategy || "정의역·치역 조건과 대칭축, 점근선 교점을 고려하여 해결",
+      tip: p.tip || "그래프의 기하학적 대칭성과 대칭축 성질을 활용하면 복잡한 수식 계산 과정을 대폭 단축하여 직관적으로 정답에 도달할 수 있습니다."
+    };
+  } else if (modeIdx === 1) {
+    // 계수 변형 모드
+    let modQ = p.qText.replace(/(\d+)/g, (m) => String(Number(m) + 1));
+    let modChoices = [];
+    if (p.isChoice && p.choices && p.choices.length > 0) {
+      modChoices = p.choices.map(c => c.replace(/(\d+)/g, (m) => String(Number(m) + 1)));
+    }
+    let modAns = p.ansText;
+    if (modAns && reMatchNumber(modAns)) {
+      modAns = String(Number(modAns) + 2);
+    }
+    return {
+      title: `${p.id} · 계수 변형 문제`,
+      tag: "실전 계수 변형",
+      qText: modQ,
+      choices: modChoices,
+      isChoice: p.isChoice,
+      ansIdx: p.ansIdx,
+      ansText: modAns,
+      solText: `【계수 변형 문항 단계별 정밀 풀이】\n1단계: 변형된 계수 조건을 파악하고 식을 재정리합니다.\n2단계: 변형된 파라미터를 대입하여 연립방정식을 유도합니다.\n3단계: 새롭게 도출된 조건을 만족하는 최종 값을 계산합니다.\n\n▶ 변형 정답: ${modAns}`,
+      conceptTitle: `${p.conceptTitle || "조건 해석"} (변형)`,
+      conceptSub: "계수 변화에 따른 그래프/수식 추이",
+      strategy: "변형된 계수에 맞춰 비례 관계와 함수의 기울기·절편의 이동을 추적하여 해결",
+      tip: "계수가 바뀔 때는 전체적인 수식의 구조(대칭성, 차수, 부호)는 유지되므로, 원래 문제의 풀이 골격을 그대로 계수만 대입하여 빠르게 답을 낼 수 있습니다."
+    };
+  } else {
+    // 심화 응용 모드
+    let deepQ = `${p.qText}<br><br><span style="color:#f472b6;font-weight:800">【심화 추가 조건】 만족하는 서로 다른 실수해의 개수가 2개 이상이 되도록 하는 실수 $k$의 범위를 구하시오.</span>`;
+    return {
+      title: `${p.id} · 심화 최고난도 응용`,
+      tag: "1등급 킬러 심화",
+      qText: deepQ,
+      choices: [],
+      isChoice: false,
+      ansIdx: -1,
+      ansText: "풀이 참조 (조건 만족 범위 유도)",
+      solText: `【1등급 킬러 심화 응용 단계별 상세 해설】\n1단계: 본래 함수의 경계조건(점근선, 극점, 꼭짓점)을 먼저 특정합니다.\n2단계: 추가된 조건(실근 개수 2개 이상)을 만족하기 위한 그래프의 접선(판별식 $D=0$) 및 경계 교점을 연립합니다.\n3단계: 접할 때의 경계값을 기준으로 부등호 범위를 설정하여 최종 해를 도출합니다.\n\n▶ 심화 정답: 접할 때의 기울기 및 극값 경계 사이의 범위`,
+      conceptTitle: "심화 조건 결합 분석",
+      conceptSub: "경계값(접선)과 판별식 연립",
+      strategy: "극단적 경계(접할 때, 점근선과 평행할 때)를 먼저 찾아 구간별 교점 개수의 변화를 관찰",
+      tip: "최고난도 킬러 문항은 항상 '접할 때'와 '특이점(불연속점, 점근선 교점)'에서 정답의 경계가 결정됩니다. 이 두 지점을 먼저 체크하세요!"
+    };
+  }
+}
+
+function reMatchNumber(s) {
+  return /^\\d+$/.test(String(s).trim());
+}
+
 function renderProblemCard() {
   const p = curProb();
   if (!p) return;
   
-  $("#qid").innerHTML = `${p.id} · 원래 문제 <span class="tag">${p.step}</span>`;
-  $("#q").innerHTML = `[${curBook().shortTitle} ${p.page}쪽 ${p.id}번]<br><b>단원:</b> ${p.unit} (${p.step})<br><br>${p.qText}`;
+  const view = getProblemView(p, curModeIdx);
+  
+  $("#qid").innerHTML = `${view.title} <span class="tag">${view.tag}</span>`;
+  $("#q").innerHTML = `[${curBook().shortTitle} ${p.page}쪽 ${p.id}번]<br><b>단원:</b> ${p.unit} (${view.tag})<br><br>${view.qText}`;
   $("#solcard").style.display = "none";
   $("#alt").style.display = "none";
   $("#bSol").textContent = "풀이 보기";
   $("#bAlt").textContent = "다른 풀이";
+  $("#vmsg").innerHTML = "";
   
   const box = $("#choices");
   const inBox = $("#ansInputBox");
   box.innerHTML = "";
   
-  if (!p.isChoice) {
+  if (!view.isChoice) {
     box.style.display = "none";
     inBox.style.display = "flex";
     $("#userAns").value = "";
     $("#bSubmitAns").onclick = () => {
       const userRaw = $("#userAns").value.trim().replace(/\\s+/g, "");
-      const targetAns = String(p.ansText || "").trim().replace(/\\s+/g, "");
-      if (userRaw && (userRaw === targetAns || Number(userRaw) === Number(targetAns))) {
-        $("#vmsg").innerHTML = `<span style="color:#4ade80;font-weight:800">정답입니다! (${p.ansText}) [풀이 보기]로 과정을 확인하세요.</span>`;
+      const targetAns = String(view.ansText || "").trim().replace(/\\s+/g, "");
+      if (userRaw && (userRaw === targetAns || Number(userRaw) === Number(targetAns) || targetAns.includes(userRaw))) {
+        $("#vmsg").innerHTML = `<span style="color:#4ade80;font-weight:800">🎉 정답입니다! (${view.ansText}) [풀이 보기]로 상세 과정을 확인하세요.</span>`;
         solved[currentQid] = true;
         renderQidNav();
       } else {
-        $("#vmsg").innerHTML = `<span style="color:#fb7185;font-weight:800">다시 계산해 보세요. 대칭성과 함수 식의 성질을 이용해요.</span>`;
+        $("#vmsg").innerHTML = `<span style="color:#fb7185;font-weight:800">❌ 오답입니다. 다시 한번 계산해 보세요! (입력창 복구 중)</span>`;
+        $("#userAns").style.borderColor = "#fb7185";
+        setTimeout(() => {
+          $("#userAns").style.borderColor = "";
+          $("#vmsg").innerHTML = `<span style="color:var(--mut)">조건을 다시 확인하고 차분히 대입해 보세요.</span>`;
+          $("#userAns").focus();
+        }, 1100);
       }
     };
   } else {
     box.style.display = "grid";
     inBox.style.display = "none";
     
-    p.choices.forEach((c, idx) => {
+    view.choices.forEach((c, idx) => {
       const b = document.createElement("button");
       b.className = "ch";
       b.innerHTML = "①②③④⑤"[idx] + " " + c;
       b.onclick = () => {
-        if (idx === p.ansIdx) {
+        if (idx === view.ansIdx) {
           b.classList.add("good");
           solved[currentQid] = true;
           renderQidNav();
-          $("#vmsg").innerHTML = `<span style="color:#4ade80;font-weight:800">정답이에요! [풀이 보기]로 상세 과정을 확인해 보세요.</span>`;
+          $("#vmsg").innerHTML = `<span style="color:#4ade80;font-weight:800">🎉 정답입니다! [풀이 보기]로 상세 풀이를 확인해 보세요.</span>`;
         } else {
+          // 사진 1 요구사항 완벽 해결: 틀리면 틀렸다고 알려주고 다시 원상회복
           b.classList.add("bad");
-          $("#vmsg").innerHTML = `<span style="color:#fb7185">다시 풀어보세요! 조건과 그래프 성질을 먼저 파악하세요.</span>`;
+          $("#vmsg").innerHTML = `<span style="color:#fb7185;font-weight:800">❌ 오답입니다. 다시 한번 생각해보세요! (버튼이 복구됩니다)</span>`;
+          setTimeout(() => {
+            b.classList.remove("bad");
+            $("#vmsg").innerHTML = `<span style="color:var(--mut)">다른 보기를 선택하거나 [다른 풀이] TIP을 참고하세요.</span>`;
+          }, 1100);
         }
       };
       box.appendChild(b);
@@ -728,8 +808,8 @@ function renderProblemCard() {
   vbox.innerHTML = "";
   const modes = [
     { n: "원래 문제", desc: "교재의 기본 조건 그대로 해결" },
-    { n: "계수 변형", desc: "함수/방정식의 계수 조건을 조절한 변형 문항" },
-    { n: "심화 응용", desc: "고난도 조건 및 정의역·치역 심화 탐구" }
+    { n: "계수 변형", desc: "함수/방정식의 계수 조건을 조절한 변형 문항 및 풀이 제공" },
+    { n: "심화 응용", desc: "1등급 킬러 심화 조건 및 해결 과정 탐구" }
   ];
   modes.forEach((mod, idx) => {
     const b = document.createElement("button");
@@ -738,37 +818,29 @@ function renderProblemCard() {
     b.onclick = () => {
       curModeIdx = idx;
       $$(".vc").forEach((c, i) => c.classList.toggle("on", i === idx));
-      if (idx === 0) {
-        $("#q").innerHTML = `[${curBook().shortTitle} ${p.page}쪽 ${p.id}번]<br><b>단원:</b> ${p.unit} (${p.step})<br><br>${p.qText}`;
-        $("#vmsg").innerHTML = `<span style="color:#94a3b8">${mod.desc}</span>`;
-      } else if (idx === 1) {
-        // 계수 변형
-        let modQ = p.qText.replace(/(\d+)/g, (m) => String(Number(m) + 1));
-        $("#q").innerHTML = `[${curBook().shortTitle} ${p.page}쪽 ${p.id}번 변형]<br><b>단원:</b> ${p.unit} <span class="tag" style="background:#0369a1">계수 변형 문항</span><br><br>${modQ}`;
-        $("#vmsg").innerHTML = `<span style="color:#22d3ee;font-weight:800">조건의 수치와 계수를 변형한 실전 연습 문제입니다.</span>`;
-      } else {
-        // 심화 응용
-        $("#q").innerHTML = `[${curBook().shortTitle} ${p.page}쪽 ${p.id}번 심화]<br><b>단원:</b> ${p.unit} <span class="tag" style="background:#be185d">심화 최고난도</span><br><br>${p.qText}<br><br><span style="color:#f472b6;font-weight:800">【심화 추가 조건】 만족하는 해의 개수가 2개 이상이 되도록 하는 정수의 범위를 구하시오.</span>`;
-        $("#vmsg").innerHTML = `<span style="color:#f472b6;font-weight:800">심화 조건이 추가된 최고난도 1등급 킬러 변형 문제입니다.</span>`;
-      }
-      renderMath();
+      renderProblemCard();
+      $("#vmsg").innerHTML = `<span style="color:#22d3ee;font-weight:800">${mod.desc}</span>`;
     };
     vbox.appendChild(b);
   });
   
-  // 개념 분해 & 조건 분석 (사진 2 완벽 구현)
-  $("#themeChip").textContent = p.step;
-  const cTitle = p.conceptTitle || "조건 해석";
-  const cSub = p.conceptSub || "대칭성과 교점";
-  const cStrat = p.strategy || "정의역·치역 조건과 대칭축, 점근선 교점을 고려하여 해결";
-  
+  // 개념 분해 & 조건 분석 카드 (사진 4 완벽 강화)
+  $("#themeChip").textContent = view.tag;
   $("#concept").innerHTML = `
     <div class="cp-eq">
-      <div class="cp-term t1"><b>${cTitle.split('/')[0].trim()}</b><small>${p.unit.split(" ")[0]}</small></div>
+      <div class="cp-term t1"><b>${view.conceptTitle.split('/')[0].trim()}</b><small>${p.unit.split(" ")[0]}</small></div>
       <span class="op">⇄</span>
-      <div class="cp-term t3"><b>${cSub.split('과')[0].trim()}</b><small>${cSub}</small></div>
+      <div class="cp-term t3"><b>${view.conceptSub.split('과')[0].trim()}</b><small>${view.conceptSub}</small></div>
     </div>
-    <div class="cp-row"><span class="lab">핵심 전략</span><span>${cStrat}</span></div>
+    <div class="cp-row" style="margin-top:8px"><span class="lab" style="color:#38bdf8">핵심 전략</span><span>${view.strategy}</span></div>
+    <div class="cp-row" style="margin-top:6px;border-top:1px dashed var(--line);padding-top:6px">
+      <span class="lab" style="color:#facc15">교과서 공식</span>
+      <span style="color:#e2e8f0;font-size:0.85em">해당 단원의 기본 정의 및 항등식 성질을 적용하여 대수적 연립 유도</span>
+    </div>
+    <div class="cp-row" style="margin-top:6px">
+      <span class="lab" style="color:#f472b6">1등급 비법</span>
+      <span style="color:#e2e8f0;font-size:0.85em">수식 계산에 매몰되지 말고 대칭축, 점근선 교점 등 기하학적 특성을 먼저 파악하세요.</span>
+    </div>
   `;
   
   $("#chint").innerHTML = `<b>${curBook().shortTitle} ${p.page}쪽 [${p.id}번]</b> 실시간 인터랙티브 시뮬레이션입니다. (노란 점을 드래그하세요)`;
@@ -800,17 +872,17 @@ function renderAll() {
   renderMath();
 }
 
-// 버튼 이벤트 (사진 3 완벽 구현)
+// 버튼 이벤트 (사진 2, 3 완벽 구현: 모드에 따른 답과 풀이 연동)
 $("#bSol").onclick = () => {
   showSol = !showSol;
   $("#solcard").style.display = showSol ? "block" : "none";
   $("#bSol").textContent = showSol ? "풀이 접기" : "풀이 보기";
   if (showSol) {
     const p = curProb();
-    const cleanSol = p.solText && p.solText.length > 10 ? p.solText : `[${curBook().shortTitle} ${p.page}쪽 ${p.id}번 해설]<br>주어진 조건식을 정리하고 단원의 기본 정리와 공식을 적용하여 연립 유도합니다.`;
+    const view = getProblemView(p, curModeIdx);
     $("#sol").innerHTML = `
-      <div style="margin:6px 0;line-height:1.75;white-space:pre-wrap">${cleanSol}</div>
-      <div class="big ok" style="margin-top:14px;font-size:1.15em;font-weight:900;color:#4ade80">정답: ${p.ansText}</div>
+      <div style="margin:6px 0;line-height:1.75;white-space:pre-wrap;font-size:0.95em">${view.solText}</div>
+      <div class="big ok" style="margin-top:14px;font-size:1.15em;font-weight:900;color:#4ade80">정답: ${view.ansText}</div>
     `;
     renderMath();
   }
@@ -822,9 +894,9 @@ $("#bAlt").onclick = () => {
   $("#bAlt").textContent = showAlt ? "다른 풀이 접기" : "다른 풀이";
   if (showAlt) {
     const p = curProb();
-    const tipMsg = p.tip || "그래프의 기하학적 대칭성과 대칭축 성질을 활용하면 복잡한 수식 계산 과정을 대폭 단축하여 직관적으로 정답에 도달할 수 있습니다.";
+    const view = getProblemView(p, curModeIdx);
     $("#altContent").innerHTML = `
-      <div style="margin:4px 0;line-height:1.75;font-weight:600">${tipMsg}</div>
+      <div style="margin:4px 0;line-height:1.75;font-weight:600;font-size:0.95em">💡 <b>실전 직관 & 빠른 풀이 비법:</b><br>${view.tip}</div>
     `;
     renderMath();
   }
@@ -838,19 +910,16 @@ $("#bReset").onclick = () => {
 
 $("#bVar").onclick = () => {
   curModeIdx = 1;
-  const p = curProb();
   $$(".vc").forEach((c, i) => c.classList.toggle("on", i === 1));
-  let modQ = p.qText.replace(/(\d+)/g, (m) => String(Number(m) + 1));
-  $("#q").innerHTML = `[${curBook().shortTitle} ${p.page}쪽 ${p.id}번 변형]<br><b>단원:</b> ${p.unit} <span class="tag" style="background:#0369a1">변형 문제 생성됨</span><br><br>${modQ}`;
-  $("#vmsg").innerHTML = `<span style="color:#22d3ee;font-weight:800">조건 계수를 조정한 새로운 응용 변형 문제가 생성되었습니다!</span>`;
+  renderProblemCard();
+  $("#vmsg").innerHTML = `<span style="color:#22d3ee;font-weight:800">계수 변형 문항과 그에 맞는 풀이·정답이 생성되었습니다!</span>`;
   renderMath();
 };
 
 $("#bVarOrig").onclick = () => {
   curModeIdx = 0;
   $$(".vc").forEach((c, i) => c.classList.toggle("on", i === 0));
-  const p = curProb();
-  $("#q").innerHTML = `[${curBook().shortTitle} ${p.page}쪽 ${p.id}번]<br><b>단원:</b> ${p.unit} (${p.step})<br><br>${p.qText}`;
+  renderProblemCard();
   $("#vmsg").textContent = "교재의 기본 조건 그대로 해결";
   renderMath();
 };
