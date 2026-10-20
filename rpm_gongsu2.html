@@ -2,61 +2,80 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
 <title>고등수학 인터랙티브 문제집 포털 · 고쟁이 & RPM</title>
 <!-- 대한민국 수학교과서 스타일 수식 렌더러 (KaTeX) -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="if(window.renderMath)renderMath()"></script>
 <style>
+/* KaTeX 수식 및 반응형 줄바꿈 방어 */
 .katex { font-size: 1.05em; color: #f1f5f9; }
-.katex-display { margin: 8px 0; }
+.katex-display {
+  margin: 10px 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+  padding: 4px 0;
+}
+
+/* 화면 너비에 따른 자율 글자 크기 (Root Font Size Clamp) */
 html {
-  font-size: clamp(13.5px, 0.9vw + 10px, 17px);
+  font-size: clamp(14px, 0.45vw + 12px, 17px);
   -webkit-text-size-adjust: 100%;
 }
 :root{
   --bg:#0f172a;--panel:#111a30;--line:#26365a;--tx:#e8edf6;--mut:#8ea0bb;
-  --c1:#22d3ee;--c2:#fb923c;--c3:#4ade80;--pnk:#f472b6;--vio:#a78bfa;--yel:#facc15
+  --c1:#22d3ee;--c2:#fb923c;--c3:#4ade80;--pnk:#f472b6;--vio:#a78bfa;--yel:#facc15;
 }
 *{box-sizing:border-box}
 body{
   margin:0;
   background:var(--bg);
   color:var(--tx);
-  font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+  font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo",-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
   -webkit-font-smoothing:antialiased;
+  word-break:keep-all;
 }
 .wrap{
-  max-width:1240px;
+  max-width:1340px;
   margin:0 auto;
-  padding:clamp(10px, 2.5vw, 20px) clamp(8px, 2vw, 16px) clamp(24px, 4vw, 40px);
+  padding:clamp(8px, 2vw, 18px) clamp(8px, 2vw, 16px) clamp(24px, 4vw, 40px);
+  width:100%;
 }
 
-/* 상단 교재 선택 바 */
+/* 상단 교재 선택 바: 모바일/태블릿에서 부드러운 가로 스와이프 터치 스크롤 */
 .book-tabs{
   display:flex;
-  gap:clamp(6px, 1.5vw, 10px);
-  flex-wrap:wrap;
+  gap:clamp(6px, 1.2vw, 10px);
   margin-bottom:12px;
   background:#090d1a;
-  padding:8px;
-  border-radius:14px;
+  padding:clamp(6px, 1.2vw, 10px);
+  border-radius:clamp(10px, 1.8vw, 14px);
   border:1.5px solid var(--line);
+  overflow-x:auto;
+  flex-wrap:nowrap;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
 }
+.book-tabs::-webkit-scrollbar{display:none}
 .book-tab{
   background:#141f38;
   color:var(--tx);
   border:1.5px solid var(--line);
-  border-radius:10px;
-  padding:clamp(7px, 1.5vw, 10px) clamp(12px, 2vw, 18px);
-  font-size:clamp(0.85rem, 1.8vw, 0.96rem);
+  border-radius:9px;
+  padding:clamp(8px, 1.4vw, 10px) clamp(12px, 1.8vw, 18px);
+  font-size:clamp(0.82rem, 1.6vw, 0.95rem);
   font-weight:800;
   cursor:pointer;
   display:flex;
   align-items:center;
   gap:8px;
   transition:.15s;
+  flex:0 0 auto;
+  white-space:nowrap;
+  touch-action:manipulation;
 }
 .book-tab:hover{border-color:#38bdf8;background:#1a294c}
 .book-tab.active{
@@ -71,66 +90,75 @@ body{
   justify-content:space-between;
   align-items:center;
   flex-wrap:wrap;
-  gap:clamp(8px, 1.8vw, 12px);
-  margin-bottom:6px;
+  gap:clamp(8px, 1.6vw, 12px);
+  margin-bottom:8px;
 }
 h1{
   margin:0;
-  font-size:clamp(1.15rem, 3.2vw, 1.45rem);
+  font-size:clamp(1.15rem, 2.8vw, 1.45rem);
   color:var(--yel);
   display:flex;
   align-items:center;
   flex-wrap:wrap;
-  gap:clamp(6px, 1.5vw, 10px);
+  gap:clamp(6px, 1.4vw, 10px);
   line-height:1.3;
 }
 .badge{
   background:#1e293b;
   color:#38bdf8;
   border:1px solid #0284c7;
-  font-size:clamp(0.68rem, 1.4vw, 0.76rem);
-  padding:2px 10px;
+  font-size:clamp(0.68rem, 1.3vw, 0.76rem);
+  padding:3px 10px;
   border-radius:999px;
   font-weight:700;
 }
+
+/* 단원 필터: 모바일/태블릿 가로 스크롤 지원 */
 .unit-filters{
   display:flex;
-  flex-wrap:wrap;
   gap:clamp(4px, 1vw, 6px);
+  overflow-x:auto;
+  flex-wrap:nowrap;
+  -webkit-overflow-scrolling:touch;
+  padding-bottom:3px;
+  scrollbar-width:none;
+  max-width:100%;
 }
+.unit-filters::-webkit-scrollbar{display:none}
 .unit-btn{
   background:#162446;
   color:var(--mut);
   border:1px solid var(--line);
   border-radius:8px;
-  padding:clamp(5px, 1.2vw, 7px) clamp(8px, 1.8vw, 12px);
-  font-size:clamp(0.75rem, 1.6vw, 0.82rem);
+  padding:clamp(6px, 1.2vw, 8px) clamp(10px, 1.6vw, 14px);
+  font-size:clamp(0.74rem, 1.4vw, 0.82rem);
   font-weight:700;
   cursor:pointer;
   transition:.15s;
   touch-action:manipulation;
+  flex:0 0 auto;
+  white-space:nowrap;
 }
 .unit-btn:hover{background:#203462;color:#fff}
 .unit-btn.active{background:var(--c1);color:#032030;border-color:var(--c1);font-weight:800}
 
 .sub{
   color:var(--mut);
-  font-size:clamp(0.76rem, 1.8vw, 0.86rem);
-  margin:6px 0 clamp(8px, 1.8vw, 12px);
+  font-size:clamp(0.76rem, 1.5vw, 0.86rem);
+  margin:4px 0 clamp(8px, 1.6vw, 12px);
   line-height:1.55;
-  word-break:keep-all;
 }
 
 /* 페이지 바 */
 .pg-track-box{
   background:var(--panel);
   border:1.5px solid var(--line);
-  border-radius:clamp(10px, 2vw, 14px);
-  padding:clamp(6px, 1.5vw, 10px) clamp(8px, 2vw, 12px);
+  border-radius:clamp(10px, 1.8vw, 14px);
+  padding:clamp(6px, 1.4vw, 10px) clamp(8px, 1.8vw, 12px);
   margin-bottom:10px;
 }
 .pg-track-hd{
-  font-size:clamp(0.72rem, 1.5vw, 0.78rem);
+  font-size:clamp(0.72rem, 1.4vw, 0.78rem);
   font-weight:800;
   color:var(--c1);
   margin-bottom:6px;
@@ -148,40 +176,42 @@ h1{
   -webkit-overflow-scrolling:touch;
 }
 .pg-btn{
-  flex:none;
+  flex:0 0 auto;
   background:#162446;
   color:var(--tx);
   border:1px solid var(--line);
   border-radius:8px;
-  padding:clamp(4px, 1vw, 6px) clamp(6px, 1.5vw, 9px);
-  font-size:clamp(0.75rem, 1.6vw, 0.82rem);
+  padding:clamp(5px, 1.2vw, 7px) clamp(8px, 1.5vw, 12px);
+  font-size:clamp(0.75rem, 1.5vw, 0.82rem);
   font-weight:700;
   cursor:pointer;
   display:flex;
   flex-direction:column;
   align-items:center;
-  min-width:clamp(50px, 12vw, 62px);
+  min-width:clamp(48px, 11vw, 62px);
+  min-height:44px;
+  justify-content:center;
   transition:.15s;
   touch-action:manipulation;
 }
-.pg-btn small{font-size:clamp(0.6rem, 1.2vw, 0.65rem);color:var(--mut);margin-top:2px}
+.pg-btn small{font-size:clamp(0.6rem, 1.1vw, 0.65rem);color:var(--mut);margin-top:2px}
 .pg-btn:hover{border-color:#60a5fa;background:#1f3360}
 .pg-btn.active{background:var(--yel);color:#1a1400;border-color:var(--yel);font-weight:900;box-shadow:0 0 12px rgba(250,204,21,.35)}
 .pg-btn.active small{color:#3d2e00;font-weight:800}
 
-/* 문항 번호 바 (calc124와 100% 동일한 버튼 스타일) */
+/* 문항 번호 바 */
 .nav{
   display:flex;
   flex-wrap:wrap;
-  gap:clamp(4px, 1.2vw, 7px);
-  margin:8px 0 clamp(10px, 2vw, 14px);
+  gap:clamp(4px, 1.1vw, 7px);
+  margin:8px 0 clamp(10px, 1.8vw, 14px);
   align-items:center;
 }
 .nav-tag{
-  font-size:clamp(0.72rem, 1.5vw, 0.78rem);
+  font-size:clamp(0.72rem, 1.4vw, 0.78rem);
   font-weight:800;
   color:var(--pnk);
-  padding:clamp(4px, 1vw, 6px) clamp(8px, 1.8vw, 11px);
+  padding:clamp(5px, 1.1vw, 7px) clamp(8px, 1.6vw, 11px);
   background:#2a1122;
   border:1px solid #701a75;
   border-radius:8px;
@@ -192,41 +222,43 @@ h1{
   color:var(--tx);
   border:1px solid var(--line);
   border-radius:8px;
-  padding:clamp(6px, 1.4vw, 8px) clamp(10px, 2vw, 15px);
-  font-size:clamp(0.82rem, 1.8vw, 0.92rem);
+  padding:clamp(6px, 1.4vw, 9px) clamp(10px, 1.8vw, 15px);
+  font-size:clamp(0.82rem, 1.6vw, 0.92rem);
   font-weight:800;
   cursor:pointer;
   transition:.15s;
+  min-height:38px;
   touch-action:manipulation;
 }
 .tb:hover{border-color:#4f6b9f;background:#1e2d52}
 .tb.on{background:var(--pnk);color:#2a0b1a;border-color:var(--pnk);box-shadow:0 0 12px rgba(244,114,182,.4)}
 .tb.ok{border-color:var(--c3)}
 
-/* 2단 그리드 */
+/* 반응형 그리드: 데스크톱 2단, 태블릿/모바일 1단 유연 전환 */
 .grid{
   display:grid;
-  grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);
-  gap:clamp(10px, 2vw, 16px);
+  grid-template-columns:minmax(0, 1.15fr) minmax(0, 1fr);
+  gap:clamp(12px, 1.8vw, 18px);
   align-items:start;
 }
-@media(max-width:880px){
-  .grid{grid-template-columns:1fr;gap:12px}
+@media(max-width:920px){
+  .grid{grid-template-columns:1fr;gap:14px}
 }
 
 .card{
   background:var(--panel);
   border:2px solid var(--pnk);
-  border-radius:clamp(12px, 2vw, 18px);
-  padding:clamp(10px, 2vw, 16px);
-  margin-bottom:clamp(10px, 1.8vw, 14px);
+  border-radius:clamp(12px, 1.8vw, 16px);
+  padding:clamp(10px, 2.2vw, 16px);
+  margin-bottom:clamp(10px, 1.6vw, 14px);
+  box-shadow:0 4px 18px rgba(0,0,0,.25);
 }
 .card.y{border-color:var(--yel)}
 .card.g{border-color:var(--c3)}
 .card.p{border-color:var(--pnk)}
 .card.b{border-color:var(--c1)}
 .lb{
-  font-size:clamp(0.75rem, 1.6vw, 0.85rem);
+  font-size:clamp(0.75rem, 1.5vw, 0.85rem);
   font-weight:800;
   margin-bottom:8px;
   color:var(--mut);
@@ -242,30 +274,32 @@ canvas{
 }
 .hint{
   color:var(--mut);
-  font-size:clamp(0.74rem, 1.6vw, 0.82rem);
+  font-size:clamp(0.74rem, 1.5vw, 0.82rem);
   margin-top:8px;
   line-height:1.55;
-  word-break:keep-all;
 }
 .btn{
   background:#18244a;
   color:var(--tx);
   border:1px solid var(--line);
   border-radius:10px;
-  padding:clamp(6px, 1.4vw, 8px) clamp(10px, 2vw, 15px);
-  font-size:clamp(0.78rem, 1.7vw, 0.88rem);
+  padding:clamp(7px, 1.4vw, 9px) clamp(11px, 1.8vw, 16px);
+  font-size:clamp(0.78rem, 1.5vw, 0.88rem);
   font-weight:700;
   cursor:pointer;
-  margin:4px 6px 0 0;
+  margin:4px 6px 4px 0;
   transition:.12s;
+  min-height:40px;
   touch-action:manipulation;
 }
 .btn:hover{background:#223263;border-color:#5c7cb5}
 .btn.p{background:var(--c3);color:#06301a;font-weight:800;border-color:var(--c3)}
 
+/* 문제 본문 텍스트: 모바일/태블릿 반응형 폰트 및 수식 줄바꿈 */
 .pq{
-  font-size:clamp(0.96rem, 2.3vw, 1.15rem);
-  line-height:1.9;
+  font-size:clamp(0.98rem, 2.1vw, 1.15rem);
+  line-height:1.85;
+  overflow-wrap:break-word;
   word-break:keep-all;
 }
 .tag{
@@ -273,28 +307,38 @@ canvas{
   background:#1b3a2d;
   color:#7ee0a6;
   border-radius:999px;
-  padding:1px 10px;
-  font-size:clamp(0.7rem, 1.4vw, 0.78rem);
+  padding:2px 10px;
+  font-size:clamp(0.68rem, 1.3vw, 0.76rem);
   font-weight:800;
   margin-left:6px;
 }
 
+/* 객관식 선택지: 모바일(스마트폰)에서 2~3열, 태블릿/PC에서 5열 자동 정렬 */
 .choices{
   display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(clamp(65px, 16vw, 100px), 1fr));
-  gap:clamp(6px, 1.5vw, 10px);
-  margin-top:12px;
+  grid-template-columns:repeat(auto-fit, minmax(clamp(65px, 16vw, 105px), 1fr));
+  gap:clamp(6px, 1.4vw, 10px);
+  margin-top:14px;
+}
+@media(max-width:480px){
+  .choices{
+    grid-template-columns:repeat(auto-fit, minmax(75px, 1fr));
+  }
 }
 .ch{
   background:#18244a;
   color:var(--tx);
   border:1.5px solid var(--line);
   border-radius:10px;
-  padding:clamp(8px, 1.8vw, 11px) 4px;
-  font-size:clamp(0.82rem, 1.8vw, 0.95rem);
+  padding:clamp(9px, 1.6vw, 12px) 6px;
+  font-size:clamp(0.82rem, 1.6vw, 0.95rem);
   font-weight:700;
   cursor:pointer;
   transition:.12s;
+  min-height:44px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
   touch-action:manipulation;
   word-break:break-all;
 }
@@ -303,6 +347,7 @@ canvas{
 .ch.bad{background:#3a1822;border-color:#fb7185;color:#fb7185;animation:shk .25s}
 @keyframes shk{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
 
+/* 주관식 정답 입력창 반응형 */
 .input-ans-box{
   display:flex;
   align-items:center;
@@ -314,11 +359,12 @@ canvas{
   background:#060a16;
   color:#e2e8f0;
   border:1.5px solid var(--line);
-  border-radius:8px;
-  padding:clamp(7px, 1.5vw, 9px) clamp(10px, 2vw, 14px);
-  font-size:clamp(0.9rem, 2vw, 1.05rem);
+  border-radius:9px;
+  padding:clamp(8px, 1.5vw, 10px) clamp(10px, 1.8vw, 14px);
+  font-size:clamp(0.92rem, 1.8vw, 1.05rem);
   font-weight:700;
-  width:clamp(110px, 24vw, 150px);
+  width:clamp(120px, 28vw, 180px);
+  min-height:42px;
   outline:none;
 }
 .input-ans-box input:focus{border-color:var(--c1)}
@@ -328,45 +374,46 @@ canvas{
   color:var(--tx);
   border:1.5px solid var(--line);
   border-radius:999px;
-  padding:clamp(5px, 1.2vw, 7px) clamp(9px, 1.8vw, 13px);
-  font-size:clamp(0.76rem, 1.6vw, 0.84rem);
+  padding:clamp(6px, 1.2vw, 8px) clamp(10px, 1.6vw, 14px);
+  font-size:clamp(0.76rem, 1.5vw, 0.84rem);
   font-weight:700;
   cursor:pointer;
   transition:.12s;
+  min-height:36px;
   touch-action:manipulation;
 }
 .vc:hover{border-color:#f472b6}
 .vc.on{background:#f472b6;border-color:#f472b6;color:#2a0b1a}
-.cv{display:flex;flex-direction:column;font-size:clamp(0.72rem, 1.5vw, 0.78rem);color:var(--mut)}
-.cv input{background:#060a16;color:#e2e8f0;border:1px solid var(--line);border-radius:7px;padding:5px 8px;font-size:14px;width:clamp(70px, 16vw, 90px)}
+.cv{display:flex;flex-direction:column;font-size:clamp(0.72rem, 1.4vw, 0.78rem);color:var(--mut)}
+.cv input{background:#060a16;color:#e2e8f0;border:1px solid var(--line);border-radius:7px;padding:6px 8px;font-size:14px;width:clamp(70px, 16vw, 90px)}
 
-.chip{display:inline-block;background:var(--yel);color:#1b1500;border-radius:14px;padding:2px 12px;font-weight:800;font-size:clamp(0.75rem, 1.6vw, 0.82rem)}
+.chip{display:inline-block;background:var(--yel);color:#1b1500;border-radius:14px;padding:2px 12px;font-weight:800;font-size:clamp(0.72rem, 1.4vw, 0.8rem)}
 .cp-eq{
   display:flex;
   align-items:center;
   justify-content:center;
-  gap:clamp(6px, 1.5vw, 10px);
+  gap:clamp(6px, 1.4vw, 10px);
   flex-wrap:wrap;
-  padding:clamp(8px, 1.8vw, 12px) 6px;
+  padding:clamp(8px, 1.6vw, 12px) 6px;
   background:#0c1530;
   border-radius:14px;
   margin-top:10px;
 }
-.cp-eq .op{font-size:clamp(1.1rem, 2.5vw, 1.5rem);font-weight:900;color:#cbd5e1}
+.cp-eq .op{font-size:clamp(1.1rem, 2.3vw, 1.4rem);font-weight:900;color:#cbd5e1}
 .cp-term{
   display:flex;
   flex-direction:column;
   align-items:center;
   gap:3px;
-  padding:clamp(4px, 1vw, 6px) clamp(8px, 1.8vw, 12px);
+  padding:clamp(5px, 1vw, 7px) clamp(8px, 1.6vw, 12px);
   border:2px solid currentColor;
   border-radius:12px;
   cursor:pointer;
   transition:.12s;
   min-width:clamp(70px, 16vw, 90px);
 }
-.cp-term b{font-size:clamp(0.95rem, 2vw, 1.15rem);line-height:1}
-.cp-term small{font-size:clamp(0.68rem, 1.4vw, 0.76rem);color:#aebbd4;font-weight:600}
+.cp-term b{font-size:clamp(0.92rem, 1.8vw, 1.1rem);line-height:1}
+.cp-term small{font-size:clamp(0.66rem, 1.3vw, 0.74rem);color:#aebbd4;font-weight:600}
 .cp-term:hover{background:rgba(255,255,255,.1);transform:translateY(-2px);box-shadow:0 0 16px currentColor}
 .t1{color:#22d3ee}.t2{color:#fb923c}.t3{color:#4ade80}.t4{color:#f472b6}.t5{color:#facc15}
 .cp-row{
@@ -375,25 +422,25 @@ canvas{
   gap:6px;
   flex-wrap:wrap;
   margin-top:10px;
-  font-size:clamp(0.8rem, 1.7vw, 0.9rem);
+  font-size:clamp(0.8rem, 1.6vw, 0.9rem);
   color:#d5deee;
-  line-height:1.5;
+  line-height:1.55;
 }
-.cp-row .lab{flex:none;font-size:clamp(0.72rem, 1.5vw, 0.78rem);font-weight:800;color:#8ea0bb;min-width:60px}
+.cp-row .lab{flex:none;font-size:clamp(0.72rem, 1.4vw, 0.78rem);font-weight:800;color:#8ea0bb;min-width:60px}
 
-.f{font-size:clamp(0.85rem, 1.9vw, 0.95rem);line-height:1.8;word-break:keep-all}
+.f{font-size:clamp(0.86rem, 1.8vw, 0.96rem);line-height:1.8;overflow-wrap:break-word}
 .ok{color:var(--c3);font-weight:800}
-.big{font-size:clamp(1.1rem, 2.4vw, 1.3rem);font-weight:900}
+.big{font-size:clamp(1.1rem, 2.2vw, 1.3rem);font-weight:900}
 .altm{
   background:#0c1530;
   border-radius:12px;
-  padding:clamp(8px, 1.8vw, 12px);
+  padding:clamp(8px, 1.6vw, 12px);
   margin:8px 0;
-  font-size:clamp(0.82rem, 1.8vw, 0.92rem);
+  font-size:clamp(0.82rem, 1.7vw, 0.92rem);
   line-height:1.75;
-  word-break:keep-all;
+  overflow-x:auto;
 }
-.altt{color:var(--yel);font-weight:800;font-size:clamp(0.78rem, 1.6vw, 0.85rem);margin-bottom:4px}
+.altt{color:var(--yel);font-weight:800;font-size:clamp(0.78rem, 1.5vw, 0.85rem);margin-bottom:4px}
 </style>
 </head>
 <body>
@@ -875,19 +922,25 @@ $("#bVarOrig").onclick = () => {
   renderMath();
 };
 
-/* 캔버스 렌더링 */
+/* 캔버스 렌더링: 디바이스별 자율 비율 및 고해상도(Retina) 최적화 */
 function sizeCv() {
   if (!cv) return;
   const dpr = Math.min(window.devicePixelRatio || 1, 2);
-  cw = Math.max(260, cv.clientWidth || 500);
-  chh = Math.max(260, Math.min(Math.round(cw * 0.68), 450));
+  const containerW = cv.parentElement ? cv.parentElement.clientWidth : cv.clientWidth;
+  cw = Math.max(260, Math.round(containerW || 500));
+  
+  // 모바일/태블릿 화면 크기(innerHeight) 및 가로세로 비례에 맞춰 자율 조정
+  const isMobile = window.innerWidth <= 768;
+  const targetRatio = isMobile ? 0.62 : 0.58;
+  const maxAllowedH = Math.min(460, Math.round(window.innerHeight * 0.45));
+  chh = Math.max(220, Math.min(Math.round(cw * targetRatio), maxAllowedH));
+
   cv.width = Math.round(cw * dpr);
   cv.height = Math.round(chh * dpr);
+  cv.style.width = "100%";
   cv.style.height = chh + "px";
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 }
-window.addEventListener("resize", () => sizeCv());
-window.addEventListener("orientationchange", () => setTimeout(sizeCv, 150));
 
 let V = { x0: -6, x1: 6, y0: -8, y1: 4 };
 const X = x => 40 + (x - V.x0) / (V.x1 - V.x0) * (cw - 60);
@@ -1035,6 +1088,16 @@ function draw() {
 function initCanvasEvents() {
   cv = $("#cv");
   ctx = cv.getContext("2d");
+
+  // ResizeObserver로 모바일/태블릿 화면 회전 및 분할 화면 자율 감지
+  if (window.ResizeObserver && cv.parentElement) {
+    const ro = new ResizeObserver(() => {
+      sizeCv();
+    });
+    ro.observe(cv.parentElement);
+  }
+  window.addEventListener("resize", () => sizeCv());
+  window.addEventListener("orientationchange", () => setTimeout(sizeCv, 150));
 
   cv.addEventListener("mousedown", () => drag = true);
   cv.addEventListener("touchstart", (e) => {
