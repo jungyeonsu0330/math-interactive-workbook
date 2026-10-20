@@ -694,7 +694,7 @@ function renderProblemCard() {
   const view = getProblemView(p, curModeIdx);
   
   $("#qid").innerHTML = `${view.title} <span class="tag">${view.tag}</span>`;
-  $("#q").innerHTML = `[${curBook().shortTitle} ${p.page}쪽 ${p.id}번]<br><b>단원:</b> ${p.unit} (${view.tag})<br><br>${view.qText}`;
+  $("#q").innerHTML = view.qText;
   $("#solcard").style.display = "none";
   $("#alt").style.display = "none";
   $("#bSol").textContent = "풀이 보기";
