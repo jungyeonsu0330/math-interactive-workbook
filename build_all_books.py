@@ -1,6 +1,6 @@
 import json, os, re
 
-# 4개 교재 데이터 로드
+# 6개 교재 데이터 로드
 with open('c:/Users/Admin/Desktop/문제집작업/parsed_problems.json', 'r', encoding='utf-8') as f:
     d_gongsu2 = json.load(f)
 
@@ -13,14 +13,20 @@ with open('c:/Users/Admin/Desktop/문제집작업/parsed_daesu.json', 'r', encod
 with open('c:/Users/Admin/Desktop/문제집작업/parsed_rpm_geom.json', 'r', encoding='utf-8') as f:
     d_rpm = json.load(f)
 
-print(f"Loaded datasets: Gongsu2 ({len(d_gongsu2['probs'])}), Gongsu1 ({len(d_gongsu1['probs'])}), Daesu ({len(d_daesu['probs'])}), RPM ({len(d_rpm['probs'])})")
+with open('c:/Users/Admin/Desktop/문제집작업/parsed_rpm_gongsu2.json', 'r', encoding='utf-8') as f:
+    d_rpm_g2 = json.load(f)
 
-# 4개 교재 메타데이터
+with open('c:/Users/Admin/Desktop/문제집작업/parsed_rpm_gongsu1.json', 'r', encoding='utf-8') as f:
+    d_rpm_g1 = json.load(f)
+
+print(f"Loaded datasets: Gongsu2 ({len(d_gongsu2['probs'])}), Gongsu1 ({len(d_gongsu1['probs'])}), Daesu ({len(d_daesu['probs'])}), RPM_Geom ({len(d_rpm['probs'])}), RPM_Gongsu2 ({len(d_rpm_g2['probs'])}), RPM_Gongsu1 ({len(d_rpm_g1['probs'])})")
+
+# 6개 교재 메타데이터
 ALL_BOOKS_CONFIG = {
     "gongsu1": {
         "title": "유형내신 고쟁이 공통수학1",
         "shortTitle": "고쟁이 공통수학1",
-        "badge": "사진 1 교재",
+        "badge": "고쟁이 공수1",
         "units": ["all", "01 다항식의 연산과 나머지정리", "02 방정식과 부등식", "03 경우의 수와 행렬", "04 도형의 방정식"],
         "defaultPage": 7,
         "defaultQid": "0001",
@@ -30,7 +36,7 @@ ALL_BOOKS_CONFIG = {
     "gongsu2": {
         "title": "유형내신 고쟁이 공통수학2",
         "shortTitle": "고쟁이 공통수학2",
-        "badge": "사진 4 표준",
+        "badge": "고쟁이 공수2",
         "units": ["all", "01 함수", "02 유리함수와 무리함수"],
         "defaultPage": 178,
         "defaultQid": "0666",
@@ -40,7 +46,7 @@ ALL_BOOKS_CONFIG = {
     "daesu": {
         "title": "유형내신 고쟁이 대수",
         "shortTitle": "고쟁이 대수",
-        "badge": "사진 2 교재",
+        "badge": "고쟁이 대수",
         "units": ["all", "01 지수함수와 로그함수", "02 삼각함수", "03 수열"],
         "defaultPage": 7,
         "defaultQid": "0001",
@@ -50,12 +56,32 @@ ALL_BOOKS_CONFIG = {
     "rpm_geom": {
         "title": "개념원리 RPM 기하",
         "shortTitle": "RPM 기하",
-        "badge": "사진 3 교재",
+        "badge": "RPM 기하",
         "units": ["all", "01 이차곡선 (포물선·타원·쌍곡선)", "02 평면벡터", "03 공간도형과 공간좌표"],
         "defaultPage": 8,
         "defaultQid": "0001",
         "pages": d_rpm["pages"],
         "probs": d_rpm["probs"]
+    },
+    "rpm_gongsu2": {
+        "title": "개념원리 RPM 공통수학2",
+        "shortTitle": "RPM 공통수학2",
+        "badge": "사진 1·2 신규 등록",
+        "units": ["all", "01 평면좌표와 직선의 방정식", "02 원의 방정식과 도형의 이동", "03 집합과 명제", "04 함수와 역함수", "05 유리함수와 무리함수"],
+        "defaultPage": 7,
+        "defaultQid": "0001",
+        "pages": d_rpm_g2["pages"],
+        "probs": d_rpm_g2["probs"]
+    },
+    "rpm_gongsu1": {
+        "title": "개념원리 RPM 공통수학1",
+        "shortTitle": "RPM 공통수학1",
+        "badge": "사진 1 신규 등록",
+        "units": ["all", "01 다항식의 연산과 인수분해", "02 방정식과 부등식", "03 경우의 수와 행렬"],
+        "defaultPage": 7,
+        "defaultQid": "0001",
+        "pages": d_rpm_g1["pages"],
+        "probs": d_rpm_g1["probs"]
     }
 }
 
@@ -467,6 +493,8 @@ canvas{
     <button class="book-tab active" data-book="gongsu2" onclick="switchBook('gongsu2')">📗 고쟁이 공통수학2</button>
     <button class="book-tab" data-book="daesu" onclick="switchBook('daesu')">📙 고쟁이 대수</button>
     <button class="book-tab" data-book="rpm_geom" onclick="switchBook('rpm_geom')">📕 RPM 기하</button>
+    <button class="book-tab" data-book="rpm_gongsu2" onclick="switchBook('rpm_gongsu2')">📗 RPM 공통수학2</button>
+    <button class="book-tab" data-book="rpm_gongsu1" onclick="switchBook('rpm_gongsu1')">📘 RPM 공통수학1</button>
   </div>
 
   <div class="hdr">
@@ -1137,9 +1165,9 @@ with open('c:/Users/Admin/Desktop/문제집작업/index.html', 'w', encoding='ut
 print("Generated index.html successfully!")
 
 # 개별 뷰어 저장
-for b_key in ["gongsu1", "daesu", "rpm_geom"]:
+for b_key in ["gongsu1", "daesu", "rpm_geom", "rpm_gongsu2", "rpm_gongsu1"]:
     custom_html = final_html.replace('switchBook("gongsu2");', f'switchBook("{b_key}");')
-    target_name = f"gojaengi_{b_key}.html" if "gong" in b_key or "dae" in b_key else f"{b_key}.html"
+    target_name = f"gojaengi_{b_key}.html" if ("gong" in b_key or "dae" in b_key) and "rpm" not in b_key else f"{b_key}.html"
     with open(f'c:/Users/Admin/Desktop/문제집작업/{target_name}', 'w', encoding='utf-8') as f:
         f.write(custom_html)
     print(f"Generated {target_name} successfully!")
