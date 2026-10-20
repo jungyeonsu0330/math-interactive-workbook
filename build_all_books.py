@@ -19,7 +19,19 @@ with open('c:/Users/Admin/Desktop/문제집작업/parsed_rpm_gongsu2.json', 'r',
 with open('c:/Users/Admin/Desktop/문제집작업/parsed_rpm_gongsu1.json', 'r', encoding='utf-8') as f:
     d_rpm_g1 = json.load(f)
 
-print(f"Loaded datasets: Gongsu2 ({len(d_gongsu2['probs'])}), Gongsu1 ({len(d_gongsu1['probs'])}), Daesu ({len(d_daesu['probs'])}), RPM_Geom ({len(d_rpm['probs'])}), RPM_Gongsu2 ({len(d_rpm_g2['probs'])}), RPM_Gongsu1 ({len(d_rpm_g1['probs'])})")
+with open('c:/Users/Admin/Desktop/문제집작업/parsed_rpm_daesu.json', 'r', encoding='utf-8') as f:
+    d_rpm_daesu = json.load(f)
+
+with open('c:/Users/Admin/Desktop/문제집작업/parsed_rpm_calc1.json', 'r', encoding='utf-8') as f:
+    d_rpm_calc1 = json.load(f)
+
+with open('c:/Users/Admin/Desktop/문제집작업/parsed_rpm_calc2.json', 'r', encoding='utf-8') as f:
+    d_rpm_calc2 = json.load(f)
+
+with open('c:/Users/Admin/Desktop/문제집작업/parsed_mock_calc.json', 'r', encoding='utf-8') as f:
+    d_mock_calc = json.load(f)
+
+print(f"Loaded datasets: Gongsu2 ({len(d_gongsu2['probs'])}), Gongsu1 ({len(d_gongsu1['probs'])}), Daesu ({len(d_daesu['probs'])}), RPM_Geom ({len(d_rpm['probs'])}), RPM_Gongsu2 ({len(d_rpm_g2['probs'])}), RPM_Gongsu1 ({len(d_rpm_g1['probs'])}), RPM_Daesu ({len(d_rpm_daesu['probs'])}), RPM_Calc1 ({len(d_rpm_calc1['probs'])}), RPM_Calc2 ({len(d_rpm_calc2['probs'])}), Mock_Calc ({len(d_mock_calc['probs'])})")
 
 # 6개 교재 메타데이터
 ALL_BOOKS_CONFIG = {
@@ -82,6 +94,46 @@ ALL_BOOKS_CONFIG = {
         "defaultQid": "0001",
         "pages": d_rpm_g1["pages"],
         "probs": d_rpm_g1["probs"]
+    },
+    "rpm_daesu": {
+        "title": "개념원리 RPM 대수 (2022개정)",
+        "shortTitle": "RPM 대수",
+        "badge": "2022개정 신규 등록",
+        "units": ["all", "01 지수함수와 로그함수", "02 삼각함수", "03 수열"],
+        "defaultPage": 6,
+        "defaultQid": "0001",
+        "pages": d_rpm_daesu["pages"],
+        "probs": d_rpm_daesu["probs"]
+    },
+    "rpm_calc1": {
+        "title": "개념원리 RPM 미적분1 (2022개정)",
+        "shortTitle": "RPM 미적분1",
+        "badge": "2022개정 신규 등록",
+        "units": ["all", "01 함수의 극한과 연속", "02 미분법", "03 적분법"],
+        "defaultPage": 6,
+        "defaultQid": "0001",
+        "pages": d_rpm_calc1["pages"],
+        "probs": d_rpm_calc1["probs"]
+    },
+    "rpm_calc2": {
+        "title": "개념원리 RPM 미적분2 (2022개정)",
+        "shortTitle": "RPM 미적분2",
+        "badge": "2022개정 신규 등록",
+        "units": ["all", "01 수열의 극한", "02 미분법", "03 적분법"],
+        "defaultPage": 6,
+        "defaultQid": "0001",
+        "pages": d_rpm_calc2["pages"],
+        "probs": d_rpm_calc2["probs"]
+    },
+    "mock_calc": {
+        "title": "261020 수능&모의 미적분 실전 모의고사",
+        "shortTitle": "수능·모의 미적분",
+        "badge": "실전 15제 신규 등록",
+        "units": ["all", "01 수열의 극한과 급수", "02 미분법", "03 적분법"],
+        "defaultPage": 1,
+        "defaultQid": "0001",
+        "pages": d_mock_calc["pages"],
+        "probs": d_mock_calc["probs"]
     }
 }
 
@@ -542,6 +594,10 @@ canvas{
     <button class="book-tab" data-book="rpm_geom" onclick="switchBook('rpm_geom')">📕 RPM 기하</button>
     <button class="book-tab" data-book="rpm_gongsu2" onclick="switchBook('rpm_gongsu2')">📗 RPM 공통수학2</button>
     <button class="book-tab" data-book="rpm_gongsu1" onclick="switchBook('rpm_gongsu1')">📘 RPM 공통수학1</button>
+    <button class="book-tab" data-book="rpm_daesu" onclick="switchBook('rpm_daesu')">📙 RPM 대수</button>
+    <button class="book-tab" data-book="rpm_calc1" onclick="switchBook('rpm_calc1')">📕 RPM 미적분1</button>
+    <button class="book-tab" data-book="rpm_calc2" onclick="switchBook('rpm_calc2')">📕 RPM 미적분2</button>
+    <button class="book-tab" data-book="mock_calc" onclick="switchBook('mock_calc')">🎯 수능·모의 미적분</button>
   </div>
 
   <div class="hdr">
@@ -833,9 +889,10 @@ function renderProblemCard() {
     box.style.display = "none";
     inBox.style.display = "flex";
     $("#userAns").value = "";
+    $("#userAns").onkeydown = (e) => { if (e.key === "Enter") $("#bSubmitAns").click(); };
     $("#bSubmitAns").onclick = () => {
-      const userRaw = $("#userAns").value.trim().replace(/\\s+/g, "");
-      const targetAns = String(view.ansText || "").trim().replace(/\\s+/g, "");
+      const userRaw = $("#userAns").value.trim().replace(/\s+/g, "");
+      const targetAns = String(view.ansText || "").trim().replace(/\s+/g, "");
       if (userRaw && (userRaw === targetAns || Number(userRaw) === Number(targetAns) || targetAns.includes(userRaw))) {
         $("#vmsg").innerHTML = `<span style="color:#4ade80;font-weight:800">🎉 정답입니다! (${view.ansText}) [풀이 보기]로 상세 과정을 확인하세요.</span>`;
         solved[currentQid] = true;
@@ -865,7 +922,7 @@ function renderProblemCard() {
           renderQidNav();
           $("#vmsg").innerHTML = `<span style="color:#4ade80;font-weight:800">🎉 정답입니다! [풀이 보기]로 상세 풀이를 확인해 보세요.</span>`;
         } else {
-          // 사진 1 요구사항 완벽 해결: 틀리면 틀렸다고 알려주고 다시 원상회복
+          // 틀리면 틀렸다고 알려주고 다시 원상회복
           b.classList.add("bad");
           $("#vmsg").innerHTML = `<span style="color:#fb7185;font-weight:800">❌ 오답입니다. 다시 한번 생각해보세요! (버튼이 복구됩니다)</span>`;
           setTimeout(() => {
@@ -878,7 +935,7 @@ function renderProblemCard() {
     });
   }
   
-  // 응용 변형 칩 (사진 2 완벽 구현)
+  // 응용 변형 칩
   const vbox = $("#vchips");
   vbox.innerHTML = "";
   const modes = [
@@ -899,7 +956,7 @@ function renderProblemCard() {
     vbox.appendChild(b);
   });
   
-  // 개념 분해 & 조건 분석 카드 (사진 4 완벽 강화)
+  // 개념 분해 & 조건 분석 카드
   $("#themeChip").textContent = view.tag;
   $("#concept").innerHTML = `
     <div class="cp-eq">
@@ -930,11 +987,14 @@ function renderMath() {
           { left: "$$", right: "$$", display: true },
           { left: "$", right: "$", display: false }
         ],
+        ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"],
         throwOnError: false
       });
     } catch (e) {
       console.warn("KaTeX render error:", e);
     }
+  } else {
+    setTimeout(renderMath, 150);
   }
 }
 window.renderMath = renderMath;
@@ -1228,7 +1288,7 @@ with open('c:/Users/Admin/Desktop/문제집작업/index.html', 'w', encoding='ut
 print("Generated index.html successfully!")
 
 # 개별 뷰어 저장
-for b_key in ["gongsu1", "daesu", "rpm_geom", "rpm_gongsu2", "rpm_gongsu1"]:
+for b_key in ["gongsu1", "daesu", "rpm_geom", "rpm_gongsu2", "rpm_gongsu1", "rpm_daesu", "rpm_calc1", "rpm_calc2", "mock_calc"]:
     custom_html = final_html.replace('switchBook("gongsu2");', f'switchBook("{b_key}");')
     target_name = f"gojaengi_{b_key}.html" if ("gong" in b_key or "dae" in b_key) and "rpm" not in b_key else f"{b_key}.html"
     with open(f'c:/Users/Admin/Desktop/문제집작업/{target_name}', 'w', encoding='utf-8') as f:
