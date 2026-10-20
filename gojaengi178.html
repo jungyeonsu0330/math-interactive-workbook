@@ -1,0 +1,967 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>고쟁이 공통수학2 178쪽 · 유형 02 유리함수</title>
+<!-- 대한민국 수학교과서 스타일 수식 렌더러 (KaTeX) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="if(window.renderMath)renderMath()"></script>
+<style>
+.katex { font-size: 1.05em; color: #f1f5f9; }
+.katex-display { margin: 8px 0; }
+html {
+  font-size: clamp(13.5px, 0.9vw + 10px, 17px);
+  -webkit-text-size-adjust: 100%;
+}
+:root{
+  --bg:#0f172a;--panel:#111a30;--line:#26365a;--tx:#e8edf6;--mut:#8ea0bb;
+  --c1:#22d3ee;--c2:#fb923c;--c3:#4ade80;--pnk:#f472b6;--vio:#a78bfa;--yel:#facc15
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--tx);
+  font-family:"Pretendard","Malgun Gothic","Apple SD Gothic Neo",sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{
+  max-width:1180px;
+  margin:0 auto;
+  padding:clamp(10px, 2.5vw, 20px) clamp(8px, 2vw, 16px) clamp(24px, 4vw, 40px);
+}
+h1{
+  margin:0 0 4px;
+  font-size:clamp(1.15rem, 3.2vw, 1.45rem);
+  color:var(--yel);
+  display:flex;
+  align-items:center;
+  gap:10px;
+  line-height:1.3;
+}
+.sub{
+  color:var(--mut);
+  font-size:clamp(0.76rem, 1.8vw, 0.88rem);
+  margin-bottom:clamp(8px, 1.8vw, 14px);
+  line-height:1.55;
+  word-break:keep-all;
+}
+.nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:clamp(4px, 1.2vw, 8px);
+  margin:8px 0 clamp(10px, 2vw, 16px);
+}
+.tb{
+  background:#1a2440;
+  color:var(--tx);
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:clamp(6px, 1.5vw, 8px) clamp(10px, 2vw, 15px);
+  font-size:clamp(0.82rem, 1.8vw, 0.92rem);
+  font-weight:800;
+  cursor:pointer;
+  transition:.15s;
+  touch-action:manipulation;
+}
+.tb:hover{border-color:#4f6b9f;background:#1e2d52}
+.tb.on{background:var(--pnk);color:#2a0b1a;border-color:var(--pnk);box-shadow:0 0 12px rgba(244,114,182,.4)}
+.tb.ok{border-color:var(--c3)}
+
+.grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);
+  gap:clamp(10px, 2vw, 16px);
+  align-items:start;
+}
+@media(max-width:880px){
+  .grid{grid-template-columns:1fr;gap:12px}
+}
+.card{
+  background:var(--panel);
+  border:2px solid var(--pnk);
+  border-radius:clamp(12px, 2vw, 18px);
+  padding:clamp(10px, 2vw, 16px);
+  margin-bottom:clamp(10px, 1.8vw, 14px);
+}
+.card.y{border-color:var(--yel)}
+.card.g{border-color:var(--c3)}
+.card.p{border-color:var(--pnk)}
+.card.b{border-color:var(--c1)}
+.lb{
+  font-size:clamp(0.75rem, 1.6vw, 0.85rem);
+  font-weight:800;
+  margin-bottom:8px;
+  color:var(--mut);
+}
+canvas{
+  width:100%;
+  display:block;
+  background:#0b1226;
+  border-radius:12px;
+  touch-action:none;
+  cursor:crosshair;
+}
+.hint{
+  color:var(--mut);
+  font-size:clamp(0.75rem, 1.6vw, 0.82rem);
+  margin-top:8px;
+  line-height:1.55;
+}
+.btn{
+  background:#18244a;
+  color:var(--tx);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:clamp(7px, 1.5vw, 9px) clamp(10px, 2vw, 16px);
+  font-size:clamp(0.8rem, 1.7vw, 0.88rem);
+  font-weight:700;
+  cursor:pointer;
+  margin:4px 6px 0 0;
+  transition:.12s;
+  touch-action:manipulation;
+}
+.btn:hover{background:#223263;border-color:#5c7cb5}
+.btn.p{background:var(--c3);color:#06301a;font-weight:800;border-color:var(--c3)}
+
+.pq{
+  font-size:clamp(0.95rem, 2.3vw, 1.15rem);
+  line-height:1.9;
+  word-break:keep-all;
+}
+.tag{
+  display:inline-block;
+  background:#1b3a2d;
+  color:#7ee0a6;
+  border-radius:999px;
+  padding:1px 10px;
+  font-size:clamp(0.7rem, 1.4vw, 0.8rem);
+  font-weight:800;
+  margin-left:6px;
+}
+.choices{
+  display:grid;
+  grid-template-columns:repeat(auto-fit, minmax(clamp(80px, 18vw, 110px), 1fr));
+  gap:clamp(6px, 1.5vw, 10px);
+  margin-top:12px;
+}
+.ch{
+  background:#18244a;
+  color:var(--tx);
+  border:1.5px solid var(--line);
+  border-radius:10px;
+  padding:clamp(8px, 1.8vw, 11px) 4px;
+  font-size:clamp(0.82rem, 1.8vw, 0.95rem);
+  font-weight:700;
+  cursor:pointer;
+  transition:.12s;
+  touch-action:manipulation;
+  word-break:break-all;
+}
+.ch:hover{border-color:#6b82b8;background:#1d2b57}
+.ch.good{background:#12372a;border-color:#4ade80;color:#4ade80;box-shadow:0 0 10px rgba(74,222,128,.3)}
+.ch.bad{background:#3a1822;border-color:#fb7185;color:#fb7185;animation:shk .25s}
+@keyframes shk{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+
+.input-ans-box{display:flex;align-items:center;gap:10px;margin-top:14px}
+.input-ans-box input{
+  background:#060a16;
+  color:#e2e8f0;
+  border:1.5px solid var(--line);
+  border-radius:8px;
+  padding:clamp(7px, 1.5vw, 9px) clamp(10px, 2vw, 14px);
+  font-size:clamp(0.9rem, 2vw, 1.05rem);
+  font-weight:700;
+  width:clamp(110px, 24vw, 150px);
+  outline:none;
+}
+.input-ans-box input:focus{border-color:var(--c1)}
+
+.hk{cursor:pointer;border-bottom:2px dotted #8aa0c8;transition:.12s;border-radius:3px}
+.hk:hover,.hk.hkon{background:rgba(250,204,21,.22);border-bottom-color:#facc15}
+.hk.g{color:#4ade80;font-weight:800;border-bottom-color:#4ade80}
+.k{color:#facc15;font-weight:800}
+
+.vc{
+  background:#1a2440;
+  color:var(--tx);
+  border:1.5px solid var(--line);
+  border-radius:999px;
+  padding:clamp(5px, 1.2vw, 7px) clamp(9px, 1.8vw, 13px);
+  font-size:clamp(0.78rem, 1.6vw, 0.85rem);
+  font-weight:700;
+  cursor:pointer;
+  transition:.12s;
+  touch-action:manipulation;
+}
+.vc:hover{border-color:#f472b6}
+.vc.on{background:#f472b6;border-color:#f472b6;color:#2a0b1a}
+.cv{display:flex;flex-direction:column;font-size:clamp(0.72rem, 1.5vw, 0.8rem);color:var(--mut)}
+.cv input{background:#060a16;color:#e2e8f0;border:1px solid var(--line);border-radius:7px;padding:5px 8px;font-size:14px;width:clamp(70px, 16vw, 90px)}
+
+.chip{display:inline-block;background:var(--yel);color:#1b1500;border-radius:14px;padding:2px 12px;font-weight:800;font-size:clamp(0.75rem, 1.6vw, 0.82rem)}
+.cp-eq{display:flex;align-items:center;justify-content:center;gap:clamp(6px, 1.5vw, 10px);flex-wrap:wrap;padding:clamp(8px, 1.8vw, 12px) 6px;background:#0c1530;border-radius:14px;margin-top:10px}
+.cp-eq .op{font-size:clamp(1.1rem, 2.5vw, 1.5rem);font-weight:900;color:#cbd5e1}
+.cp-term{display:flex;flex-direction:column;align-items:center;gap:3px;padding:clamp(4px, 1vw, 6px) clamp(8px, 1.8vw, 12px);border:2px solid currentColor;border-radius:12px;cursor:pointer;transition:.12s;min-width:clamp(70px, 16vw, 90px)}
+.cp-term b{font-size:clamp(0.95rem, 2vw, 1.15rem);line-height:1}
+.cp-term small{font-size:clamp(0.68rem, 1.4vw, 0.76rem);color:#aebbd4;font-weight:600}
+.cp-term:hover,.cp-term.hkon{background:rgba(255,255,255,.1);transform:translateY(-2px);box-shadow:0 0 16px currentColor}
+.t1{color:#22d3ee}.t2{color:#fb923c}.t3{color:#4ade80}.t4{color:#f472b6}.t5{color:#facc15}
+.cp-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-top:10px;font-size:clamp(0.8rem, 1.7vw, 0.9rem);color:#d5deee;line-height:1.5}
+.cp-row .lab{flex:none;font-size:clamp(0.72rem, 1.5vw, 0.78rem);font-weight:800;color:#8ea0bb;min-width:60px}
+.cp-var{display:inline-flex;gap:4px;border:1.5px solid currentColor;border-radius:999px;padding:1px 9px;font-weight:800;cursor:pointer;transition:.12s}
+.cp-var:hover,.cp-var.hkon{background:rgba(255,255,255,.12);box-shadow:0 0 10px currentColor}
+.cp-tag{display:inline-block;border:1.5px dashed #6b7fa8;border-radius:8px;padding:2px 8px;font-size:clamp(0.75rem, 1.6vw, 0.82rem);cursor:pointer;color:#c3cde2;transition:.12s}
+.cp-tag:hover,.cp-tag.hkon{background:rgba(250,204,21,.18);border-color:#facc15;color:#fff}
+
+.f{font-size:clamp(0.85rem, 1.9vw, 0.95rem);line-height:1.8}
+.ok{color:var(--c3);font-weight:800}
+.big{font-size:clamp(1.1rem, 2.4vw, 1.3rem);font-weight:900}
+.altm{background:#0c1530;border-radius:12px;padding:clamp(8px, 1.8vw, 12px);margin:8px 0;font-size:clamp(0.82rem, 1.8vw, 0.92rem);line-height:1.75}
+.altt{color:var(--yel);font-weight:800;font-size:clamp(0.78rem, 1.6vw, 0.85rem);margin-bottom:4px}
+</style>
+</head>
+<body>
+<div class="wrap">
+ <h1>유리함수 · 곡선과 직선의 위치 관계 및 대칭성</h1>
+ <div class="sub">고쟁이 공통수학2 178쪽 · 유형 02 · 0666~0669 &nbsp;|&nbsp; 그래프의 점(노란 원)을 끌어 보세요. 파란 글씨를 누르면(올리면) 그래프가 형광으로 반응해요.</div>
+ 
+ <div class="nav" id="nav"></div>
+ 
+ <div class="grid">
+  <!-- 좌측 인터랙티브 영역 -->
+  <div class="card">
+   <canvas id="cv"></canvas>
+   <div class="hint" id="chint">노란 점을 끌어 보세요. 글씨나 그림 위의 이름표를 누르면 서로 반응해요.</div>
+   <div style="margin-top:10px">
+    <button class="btn" id="bReset">↺ 처음 모양</button>
+    <button class="btn" id="bSol">풀이 보기</button>
+    <button class="btn" id="bAlt">다른 풀이</button>
+   </div>
+   
+   <div class="card g" id="solcard" style="margin:12px 0 0;display:none">
+    <div class="lb" style="color:var(--c3)">정답과 풀이</div>
+    <div class="f" id="sol"></div>
+   </div>
+   
+   <div class="card y" id="alt" style="margin:12px 0 0;display:none">
+    <div class="lb" style="color:var(--yel)">실전 직관 & 빠른 풀이 TIP</div>
+    <div class="f" id="altContent"></div>
+   </div>
+  </div>
+
+  <!-- 우측 문제 및 변형 영역 -->
+  <div>
+   <div class="card">
+    <div class="lb" style="color:var(--pnk)" id="qid">0666 · 원래 문제</div>
+    <div class="pq" id="q"></div>
+    <div class="choices" id="choices"></div>
+    <div class="input-ans-box" id="ansInputBox" style="display:none">
+      <input type="text" id="userAns" placeholder="정답 입력">
+      <button class="btn p" id="bSubmitAns">확인</button>
+    </div>
+   </div>
+   
+   <div class="card p" id="varcard">
+    <div class="lb" style="color:var(--pnk)">응용 · 변형 문제</div>
+    <div id="vchips" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+    <div id="vknobs" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px"></div>
+    <div style="margin-top:8px">
+     <button class="btn p" id="bVar">변형 문제 만들기</button>
+     <button class="btn" id="bVarOrig">↺ 원래 문제로</button>
+    </div>
+    <div class="hint" id="vmsg">조건을 바꾼 응용 문제예요.</div>
+   </div>
+   
+   <div class="card y">
+    <div class="lb" style="color:var(--yel)">핵심 개념 · 풀이 도구</div>
+    <span class="chip hk" data-hl="sym" id="themeChip">유형 02 · 유리함수와 대칭성</span>
+    <div id="concept"></div>
+   </div>
+  </div>
+ </div>
+</div>
+
+<script>
+// 유틸리티 정의
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+const clamp = (v, l, h) => Math.max(l, Math.min(h, v));
+const hk = (key, txt, cls) => `<span class="hk${cls ? " " + cls : ""}" data-hl="${key}">${txt}</span>`;
+const kk = t => `<b class="k">${t}</b>`;
+
+const PR = [
+  /* 0666 */
+  {
+    id: "0666", tag: "대표문제",
+    K0: { k: -2 }, L: { k: "직선의 기울기 k" },
+    bookChoices: ["−5 < k < −1", "−4 ≤ k ≤ −1", "k ≤ −5 또는 −2 ≤ k < 0", "k ≤ −4 또는 −1 ≤ k < 0", "k ≤ −4 또는 k ≥ −1"],
+    bookIdx: 4,
+    conceptTitle: "유리함수와 직선의 위치 관계 & 접선 판별식",
+    conceptHtml: `
+      <div class="cp-eq">
+        <div class="cp-term t4" data-hl="curve"><b>y = 1/(x+1) − 2</b><small>점근선 x=−1, y=−2</small></div>
+        <span class="op">∩</span>
+        <div class="cp-term t1" data-hl="line"><b>y = k(x−1) − 6</b><small>정점 (1, −6) 통과</small></div>
+        <span class="op">⇒</span>
+        <div class="cp-term t3" data-hl="krange"><b>D/4 = (k+4)(k+1) = 0</b><small>접선 k = −4, −1</small></div>
+      </div>
+      <div class="cp-row"><span class="lab">위치 관계</span><span>곡선과 직선 연립: kx² − 4x − (k+5) = 0</span></div>
+      <div class="cp-row"><span class="lab">부호 나누기</span><span class="cp-var t1" data-hl="krange">k ≤ −4 또는 k ≥ −1 (만남)</span><span class="cp-var t2" data-hl="krange">−4 < k < −1 (안 만남)</span></div>
+      <div class="cp-row"><span class="lab">왜 필요할까</span><span>유리함수는 점근선과 곡선의 볼록성 때문에 정점을 중심으로 회전할 때 접하는 두 순간이 경계가 된다!</span></div>
+      <div class="cp-row"><span class="lab">풀이 순서</span><span class="cp-tag" data-hl="curve">① 점근선 확인</span><span class="cp-tag" data-hl="fixpt">② 정점 (1, −6) 파악</span><span class="cp-tag" data-hl="tan">③ 판별식 D=0 접선</span><span class="cp-tag" data-hl="krange">④ 회전 영역 결정</span></div>
+      <div class="cp-row"><span class="lab">출제 단서</span><span class="cp-tag" data-hl="curve">곡선 y = f(x)</span><span class="cp-tag" data-hl="line">직선 y = g(x)</span><span class="cp-tag" data-hl="krange">A ∩ B ≠ ∅</span></div>
+    `,
+    modes: [
+      {
+        n: "원래 문제", K: { k: -2 }, hl: ["curve", "line"],
+        text: K => `두 집합 <br>${hk("curve", "A = {(x, y) | y = (−2x−1)/(x+1)}", "c1")}, <br>${hk("line", "B = {(x, y) | y = kx − k − 6}", "c2")}에 대하여 ${hk("krange", "A ∩ B ≠ ∅", "g")}일 때, 실수 ${hk("k", "k")}의 값의 범위는?`,
+        ans: K => ({ text: "k ≤ −4 또는 k ≥ −1" }),
+        sol: K => [
+          `유리함수 ${hk("curve", "y = (−2x−1)/(x+1) = 1/(x+1) − 2")} 는 점근선이 x = −1, y = −2 에요.`,
+          `직선 ${hk("line", "y = k(x−1) − 6")} 은 실수 k에 관계없이 항상 정점 ${hk("fixpt", "(1, −6)")} 을 지나요.`,
+          `두 식을 연립하면 (−2x−1)/(x+1) = kx − k − 6 에서 kx² − 4x − (k+5) = 0 이에요.`,
+          `곡선과 직선이 접할 때 판별식 D/4 = (−2)² − k(−k−5) = (k+4)(k+1) = 0 에서 ${hk("tan", "k = −4 또는 k = −1")} 이에요.`,
+          `그래프를 회전시켜 보면 k ≤ −4 일 때 3사분면 곡선과 만나고, k ≥ −1 일 때 4사분면 곡선과 만나요.`,
+          `따라서 두 그래프가 만나는(A ∩ B ≠ ∅) k의 범위는 <b>k ≤ −4 또는 k ≥ −1</b> 이에요.`
+        ],
+        altSol: [
+          `<b>기하학적 직관 풀이:</b>`,
+          `정점 (1, −6)은 점근선 교점 (−1, −2)의 오른쪽 아래에 위치해요.`,
+          `• k = −4 일 때 3사분면 곡선과 접함 (더 가파르면 2점 만남 → k ≤ −4)`,
+          `• −4 < k < −1 일 때 곡선 사이 빈 틈을 지나 교점 0개!`,
+          `• k = −1 일 때 4사분면 곡선과 접함 (반시계로 돌리면 k ≥ −1에서 항상 교점 발생)`,
+          `따라서 <b>k ≤ −4 또는 k ≥ −1</b> 임을 빠르게 판정할 수 있습니다.`
+        ]
+      },
+      {
+        n: "접할 때의 기울기 k", d: "오직 한 점에서 접할 때의 k값 구하기", K: { k: -4 }, hl: ["tan"],
+        choices: ["k = −4 또는 k = −1", "k = −3 또는 k = 0", "k = −5 또는 k = −2", "k = −4만 가능", "k = −1만 가능"],
+        choiceIdx: 0,
+        text: K => `두 집합 A = {(x, y) | y = (−2x−1)/(x+1)}, B = {(x, y) | y = kx − k − 6}에 대하여 두 도형이 ${hk("tan", "오직 한 점에서 접할 때", "g")}의 실수 k의 값은?`,
+        ans: K => ({ text: "k = −4 또는 k = −1" }),
+        sol: K => [
+          `두 식을 연립하여 정리하면 kx² − 4x − (k+5) = 0 이에요.`,
+          `접하므로 판별식 D/4 = 0 이어야 해요.`,
+          `D/4 = 4 + k(k+5) = k² + 5k + 4 = (k+4)(k+1) = 0`,
+          `따라서 <b>k = −4 또는 k = −1</b> 일 때 두 도형이 접해요.`
+        ]
+      },
+      {
+        n: "만나지 않을 조건", d: "교점이 없도록 하는 k의 범위", K: { k: -2.5 }, hl: ["krange"],
+        choices: ["−4 < k < −1", "k < −4", "k > −1", "−5 < k < 0", "−3 < k < 1"],
+        choiceIdx: 0,
+        text: K => `두 집합 A = {(x, y) | y = (−2x−1)/(x+1)}, B = {(x, y) | y = kx − k − 6}에 대하여 ${hk("krange", "A ∩ B = ∅ (교점 없음)", "g")}을 만족하는 k의 범위는?`,
+        ans: K => ({ text: "−4 < k < −1" }),
+        sol: K => [
+          `두 도형이 만날 조건이 k ≤ −4 또는 k ≥ −1 이므로,`,
+          `만나지 않을 조건은 그 여집합인 <b>−4 < k < −1</b> 이에요.`
+        ]
+      }
+    ]
+  },
+
+  /* 0667 */
+  {
+    id: "0667", tag: "심화",
+    K0: { a: 1.035 }, L: { a: "점 A의 x좌표" },
+    bookChoices: ["2", "2√2", "2√3", "4", "2√5"],
+    bookIdx: 3,
+    conceptTitle: "유리함수의 y = x 대칭성과 선분의 길이",
+    conceptHtml: `
+      <div class="cp-eq">
+        <div class="cp-term t1" data-hl="curve"><b>y = 4/x</b><small>y = x 대칭 곡선</small></div>
+        <span class="op">⇄</span>
+        <div class="cp-term t4" data-hl="lineAB"><b>직선 AB (기울기 −1)</b><small>대칭축과 수직</small></div>
+        <span class="op">⇒</span>
+        <div class="cp-term t3" data-hl="sym"><b>A(a, b) ↔ B(b, a)</b><small>대칭점 (ab = 4)</small></div>
+      </div>
+      <div class="cp-row"><span class="lab">거리 조건</span><span>OA = OB = √(a²+b²) &nbsp;→&nbsp; OA × OB = a² + b² = 16</span></div>
+      <div class="cp-row"><span class="lab">선분 길이</span><span>AB = √2(b−a) = √[2((a+b)² − 4ab)] = √[2(a²+b² − 2ab)] = 4</span></div>
+      <div class="cp-row"><span class="lab">풀이 순서</span><span class="cp-tag" data-hl="sym">① y = x 대칭 발견</span><span class="cp-tag" data-hl="pts">② A(a,b), B(b,a) 세팅</span><span class="cp-tag" data-hl="alg">③ a²+b²=16, ab=4</span><span class="cp-tag" data-hl="AB">④ 선분 AB 길이 산출</span></div>
+    `,
+    modes: [
+      {
+        n: "원래 문제", K: { a: 1.035 }, hl: ["curve", "AB", "sym"],
+        text: K => `그림과 같이 함수 ${hk("curve", "y = 4/x (x > 0)")}의 그래프 위의 두 점 ${hk("pts", "A, B")}에 대하여 직선 ${hk("lineAB", "AB의 기울기가 −1")}이고, ${hk("prod", "OA × OB = 16")}을 만족시킨다. 선분 ${hk("AB", "AB의 길이", "g")}는? (단, O는 원점이다.)`,
+        ans: K => ({ text: "4" }),
+        sol: K => [
+          `함수 ${hk("curve", "y = 4/x")} 는 직선 ${hk("sym", "y = x")} 에 대하여 대칭이에요.`,
+          `직선 AB의 기울기가 −1 이므로 y = x 대칭축과 수직이에요. 따라서 점 A, B는 y = x 에 대칭이에요.`,
+          `A(a, b), B(b, a) (0 < a < b)라 두면 ab = 4 이고, OA = OB = √(a²+b²) 이에요.`,
+          `OA × OB = a² + b² = 16 이에요.`,
+          `선분 AB의 길이는 AB = √[(b−a)² + (a−b)²] = √2(b−a) 이에요.`,
+          `(b−a)² = a² + b² − 2ab = 16 − 8 = 8 이므로 b−a = √8 = 2√2 이에요.`,
+          `따라서 AB = √2 × 2√2 = <b>4</b> 입니다.`
+        ],
+        altSol: [
+          `<b>직관 계산:</b> A(a, 4/a) 에서 OA² = a² + 16/a² = 16.`,
+          `AB² = 2(4/a − a)² = 2(a² + 16/a² − 8) = 2(16 − 8) = 16.`,
+          `∴ AB = √16 = <b>4</b> 로 바로 풀립니다!`
+        ]
+      }
+    ]
+  },
+
+  /* 0668 */
+  {
+    id: "0668", tag: "기출",
+    K0: { S: 8 }, L: { S: "직선 절편 S (x+y=S)" },
+    isInput: true, correctVal: 36,
+    conceptTitle: "유리함수의 중심 대칭과 이차방정식 근과 계수",
+    conceptHtml: `
+      <div class="cp-eq">
+        <div class="cp-term t4" data-hl="curve"><b>(x−2)(y−2) = k+4</b><small>점근선 (2, 2)</small></div>
+        <span class="op">+</span>
+        <div class="cp-term t1" data-hl="line"><b>x + y = 8</b><small>기울기 −1</small></div>
+        <span class="op">⇒</span>
+        <div class="cp-term t3" data-hl="sym"><b>P(a, b) ↔ Q(b, a)</b><small>y = x 대칭</small></div>
+      </div>
+      <div class="cp-row"><span class="lab">대칭 구조</span><span>점근선 교점 (2, 2)가 y=x 위에 있고 x+y=8이 y=x에 수직이므로 교점 P, Q는 y=x 대칭!</span></div>
+      <div class="cp-row"><span class="lab">좌표 관계</span><span>P(a, b), Q(b, a)에서 a+b = 8, a · b = 14 (문제 조건)</span></div>
+      <div class="cp-row"><span class="lab">구하는 값</span><span>OP × OQ = a² + b² = (a+b)² − 2ab = 64 − 28 = 36</span></div>
+    `,
+    modes: [
+      {
+        n: "원래 문제", K: { S: 8 }, hl: ["curve", "line", "sym"],
+        text: K => `그림과 같이 도형 ${hk("curve", "xy − 2x − 2y = k")}가 직선 ${hk("line", "x + y = 8")}과 만나는 두 점을 P, Q라 하자. 두 점 P, Q의 x좌표의 곱이 ${kk("14")}일 때, ${hk("target", "OP × OQ의 값", "g")}을 구하시오. (단, k < 0이고, O는 원점이다.)`,
+        ans: K => ({ text: "36" }),
+        sol: K => [
+          `도형 식을 정리하면 (x−2)(y−2) = k + 4 이므로 점근선의 교점은 (2, 2) 에요.`,
+          `점 (2, 2)가 직선 y = x 위에 있고, 직선 x + y = 8 은 y = x 와 수직이므로 두 교점 P, Q는 직선 y = x 에 대하여 대칭이에요!`,
+          `P(a, b)라 하면 Q(b, a)이고 a + b = 8, 두 점의 x좌표 곱 ab = 14 에요.`,
+          `OP = OQ = √(a² + b²) 이므로 OP × OQ = a² + b² 이에요.`,
+          `a² + b² = (a+b)² − 2ab = 8² − 2×14 = 64 − 28 = <b>36</b> 입니다.`
+        ],
+        altSol: [
+          `<b>근과 계수의 관계:</b> y = 8 − x 대입 시 x² − 8x + (16+k) = 0.`,
+          `두 근의 곱 16+k = 14 에서 k = −2.`,
+          `OP² = a² + (8−a)² = 2a² − 16a + 64 = 2(−14) + 64 = 36. ∴ OP × OQ = <b>36</b>!`
+        ]
+      }
+    ]
+  },
+
+  /* 0669 */
+  {
+    id: "0669", tag: "기출",
+    K0: { alpha: 2.732 }, L: { alpha: "점 B의 x좌표 α" },
+    bookChoices: ["5", "6", "7", "8", "9"],
+    bookIdx: 3,
+    conceptTitle: "유리함수의 대칭점과 삼각형의 넓이 공식",
+    conceptHtml: `
+      <div class="cp-eq">
+        <div class="cp-term t1" data-hl="curve"><b>y = 2/x</b><small>곡선 위 점 B, C</small></div>
+        <span class="op">⇄</span>
+        <div class="cp-term t4" data-hl="sym"><b>y = x 대칭</b><small>B(α, β), C(β, α)</small></div>
+        <span class="op">+</span>
+        <div class="cp-term t2" data-hl="ptA"><b>A(−2, 2)</b><small>y = −x 위의 정점</small></div>
+      </div>
+      <div class="cp-row"><span class="lab">삼각형 넓이</span><span>밑변 BC = √2(α−β), 높이 AH = (α+β)/√2 &nbsp;→&nbsp; S = 1/2(α²−β²) = 2√3</span></div>
+      <div class="cp-row"><span class="lab">제곱차 도출</span><span>α² − β² = 4√3, 곡선 위 점이므로 αβ = 2</span></div>
+      <div class="cp-row"><span class="lab">목표 계산</span><span>(α²+β²)² = (α²−β²)² + 4α²β² = 48 + 16 = 64 &nbsp;→&nbsp; α² + β² = 8</span></div>
+    `,
+    modes: [
+      {
+        n: "원래 문제", K: { alpha: 2.732 }, hl: ["curve", "tri", "sym"],
+        text: K => `그림과 같이 점 ${hk("ptA", "A(−2, 2)")}와 곡선 ${hk("curve", "y = 2/x")} 위의 두 점 B, C가 다음 조건을 만족시킨다.<br>
+        (가) 점 B와 점 C는 직선 ${hk("sym", "y = x")}에 대하여 대칭이다.<br>
+        (나) ${hk("tri", "삼각형 ABC의 넓이는 2√3")}이다.<br>
+        점 B의 좌표를 (α, β)라 할 때, ${hk("target", "α² + β²의 값", "g")}은? (단, α > √2)`,
+        ans: K => ({ text: "8" }),
+        sol: K => [
+          `점 B(α, β), C(β, α)는 y = x 대칭이고 곡선 위이므로 αβ = 2 이에요.`,
+          `직선 BC의 방정식은 x + y − (α+β) = 0 이에요.`,
+          `밑변 BC = √2(α−β) 이고, 점 A(−2, 2)에서 직선 BC까지의 거리 AH = (α+β)/√2 이에요.`,
+          `삼각형 ABC의 넓이 S = 1/2 × √2(α−β) × (α+β)/√2 = 1/2 (α² − β²) = 2√3`,
+          `따라서 α² − β² = 4√3 이에요.`,
+          `(α² + β²)² = (α² − β²)² + 4α²β² = (4√3)² + 4×2² = 48 + 16 = 64`,
+          `α² + β² > 0 이므로 <b>α² + β² = 8</b> 입니다.`
+        ],
+        altSol: [
+          `<b>신발끈(사선식) 초고속 풀이:</b>`,
+          `세 점 A(−2, 2), B(α, β), C(β, α)의 넓이:`,
+          `2S = | (−2β + α² + 2β) − (2α + β² − 2α) | = α² − β² = 4√3.`,
+          `따라서 복잡한 거리 공식 없이 즉시 α² + β² = 8이 도출됩니다!`
+        ]
+      }
+    ]
+  }
+];
+
+let cur = 0, mi = 0, K = {}, P = {}, showSol = false, showAlt = false;
+let solved = {}, lockHL = null, hoverHL = null, drag = null;
+let cw = 600, chh = 420;
+const cv = $("#cv"), ctx = cv.getContext("2d");
+
+const def = () => PR[cur], mode = () => def().modes[mi];
+
+function recomputeHL() {
+  window.HLK = hoverHL || lockHL || [];
+  document.querySelectorAll("[data-hl]").forEach(e => {
+    const ks = e.dataset.hl.split(",");
+    e.classList.toggle("hkon", window.HLK.length > 0 && ks.some(k => window.HLK.includes(k)));
+  });
+}
+
+document.addEventListener("mouseover", e => {
+  const t = e.target.closest && e.target.closest("[data-hl]");
+  if (t) { hoverHL = t.dataset.hl.split(","); recomputeHL(); }
+});
+document.addEventListener("mouseout", e => {
+  const t = e.target.closest && e.target.closest("[data-hl]");
+  if (t) { hoverHL = null; recomputeHL(); }
+});
+document.addEventListener("click", e => {
+  const t = e.target.closest && e.target.closest("[data-hl]");
+  if (t && !t.classList.contains("tb") && !t.classList.contains("vc")) {
+    const ks = t.dataset.hl.split(",");
+    lockHL = (lockHL && lockHL.join() === ks.join()) ? null : ks;
+    recomputeHL();
+  }
+});
+
+function setMode(i, Kn) {
+  mi = i;
+  const m = mode();
+  K = Object.assign({}, Kn || m.K);
+  showSol = false;
+  showAlt = false;
+  lockHL = null;
+  hoverHL = null;
+  render();
+}
+
+function renderChoices() {
+  const box = $("#choices");
+  const inputBox = $("#ansInputBox");
+  box.innerHTML = "";
+
+  const d = def(), m = mode();
+  if (d.isInput && mi === 0) {
+    box.style.display = "none";
+    inputBox.style.display = "flex";
+    $("#userAns").value = "";
+    $("#bSubmitAns").onclick = () => {
+      const v = Number($("#userAns").value.trim());
+      if (v === d.correctVal) {
+        $("#vmsg").innerHTML = `<span style="color:#4ade80;font-weight:800">정답입니다! 36 (풀이 보기로 과정을 확인하세요.)</span>`;
+        solved[cur] = 1;
+        renderNav();
+      } else {
+        $("#vmsg").innerHTML = `<span style="color:#fb7185;font-weight:800">다시 계산해 보세요. 대칭점의 성질 a+b=8, ab=14를 이용해요.</span>`;
+      }
+    };
+    return;
+  }
+
+  box.style.display = "grid";
+  inputBox.style.display = "none";
+
+  const choicesList = m.choices || d.bookChoices;
+  const correctIndex = m.choiceIdx !== undefined ? m.choiceIdx : d.bookIdx;
+
+  choicesList.forEach((c, idx) => {
+    const b = document.createElement("button");
+    b.className = "ch";
+    b.innerHTML = "①②③④⑤"[idx] + " " + c;
+    b.onclick = () => {
+      if (idx === correctIndex) {
+        b.classList.add("good");
+        solved[cur] = 1;
+        renderNav();
+        $("#vmsg").innerHTML = `<span style="color:#4ade80;font-weight:800">정답이에요! [풀이 보기]로 상세한 과정을 확인해 보세요.</span>`;
+      } else {
+        b.classList.add("bad");
+        $("#vmsg").innerHTML = `<span style="color:#fb7185">다시 풀어보세요! 유리함수의 대칭성과 점근선을 먼저 파악하세요.</span>`;
+      }
+    };
+    box.appendChild(b);
+  });
+}
+
+function renderNav() {
+  $("#nav").innerHTML = "";
+  PR.forEach((p, i) => {
+    const b = document.createElement("button");
+    b.className = "tb" + (i === cur ? " on" : "") + (solved[i] ? " ok" : "");
+    b.textContent = (solved[i] ? "✔ " : "") + p.id + (p.tag ? " · " + p.tag.split("·")[0].trim() : "");
+    b.onclick = () => { cur = i; setMode(0); };
+    $("#nav").appendChild(b);
+  });
+}
+
+function renderVar() {
+  const d = def(), box = $("#vchips");
+  box.innerHTML = "";
+  d.modes.forEach((m, i) => {
+    const b = document.createElement("button");
+    b.className = "vc" + (i === mi ? " on" : "");
+    b.innerHTML = m.n;
+    b.title = m.d || "";
+    b.onclick = () => setMode(i);
+    b.onmouseenter = () => { hoverHL = m.hl; recomputeHL(); };
+    b.onmouseleave = () => { hoverHL = null; recomputeHL(); };
+    box.appendChild(b);
+  });
+
+  const kb = $("#vknobs");
+  kb.innerHTML = "";
+  if (mode().K) {
+    Object.keys(mode().K).forEach(k => {
+      const l = document.createElement("label");
+      l.className = "cv";
+      l.innerHTML = `${d.L && d.L[k] ? d.L[k] : k} <input type="number" step="0.5" data-k="${k}" value="${K[k]}">`;
+      kb.appendChild(l);
+    });
+  }
+  $("#vmsg").textContent = mode().d || "조건을 바꾼 응용 문제예요.";
+}
+
+function render() {
+  const d = def(), m = mode();
+  $("#qid").innerHTML = `${d.id} · ${m.n}` + (d.tag ? ` <span class="tag">${d.tag}</span>` : "");
+  $("#q").innerHTML = m.text(K);
+  $("#solcard").style.display = "none";
+  $("#alt").style.display = "none";
+  $("#bAlt").textContent = "다른 풀이";
+  $("#bSol").textContent = "풀이 보기";
+
+  $("#themeChip").textContent = d.conceptTitle;
+  $("#concept").innerHTML = d.conceptHtml;
+
+  renderChoices();
+  renderNav();
+  renderVar();
+  recomputeHL();
+  sizeCv();
+  renderMath();
+}
+
+function renderMath() {
+  if (typeof renderMathInElement === "function") {
+    try {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false }
+        ],
+        throwOnError: false
+      });
+    } catch (e) {
+      console.warn("KaTeX render error:", e);
+    }
+  }
+}
+window.renderMath = renderMath;
+
+$("#bSol").onclick = () => {
+  showSol = !showSol;
+  $("#solcard").style.display = showSol ? "block" : "none";
+  $("#bSol").textContent = showSol ? "풀이 접기" : "풀이 보기";
+  if (showSol) {
+    const m = mode();
+    $("#sol").innerHTML = m.sol(K).map((l, i) => `<div style="margin:6px 0">${"①②③④⑤⑥"[i] || "•"} ${l}</div>`).join("") +
+      `<div class="big ok" style="margin-top:10px">정답: ${m.ans(K).text}</div>`;
+    renderMath();
+  }
+};
+
+$("#bAlt").onclick = () => {
+  showAlt = !showAlt;
+  $("#alt").style.display = showAlt ? "block" : "none";
+  $("#bAlt").textContent = showAlt ? "다른 풀이 접기" : "다른 풀이";
+  if (showAlt) {
+    const m = mode();
+    $("#altContent").innerHTML = (m.altSol || ["대칭성을 활용하면 빠르게 풀립니다."]).map(l => `<div style="margin:4px 0">${l}</div>`).join("");
+    renderMath();
+  }
+};
+
+$("#bReset").onclick = () => setMode(mi, mode().K);
+$("#bVar").onclick = () => {
+  const o = {};
+  document.querySelectorAll("#vknobs input").forEach(i => o[i.dataset.k] = Number(i.value));
+  setMode(mi, o);
+};
+$("#bVarOrig").onclick = () => setMode(0);
+
+/* ---------- Canvas 렌더링 ---------- */
+function sizeCv() {
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  cw = Math.max(260, cv.clientWidth || 500);
+  chh = Math.max(260, Math.min(Math.round(cw * 0.68), 450));
+  cv.width = Math.round(cw * dpr);
+  cv.height = Math.round(chh * dpr);
+  cv.style.height = chh + "px";
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+window.addEventListener("resize", () => { sizeCv(); });
+window.addEventListener("orientationchange", () => { setTimeout(sizeCv, 150); });
+
+let V = { x0: -6, x1: 6, y0: -8, y1: 4 };
+const X = x => 40 + (x - V.x0) / (V.x1 - V.x0) * (cw - 60);
+const Y = y => 20 + (V.y1 - y) / (V.y1 - V.y0) * (chh - 50);
+const iX = px => V.x0 + (px - 40) / (cw - 60) * (V.x1 - V.x0);
+const iY = py => V.y1 - (py - 20) / (chh - 50) * (V.y1 - V.y0);
+
+function drawAxes() {
+  ctx.save();
+  ctx.strokeStyle = "rgba(148, 163, 184, 0.15)";
+  ctx.lineWidth = 1;
+  ctx.fillStyle = "#64748b";
+  ctx.font = "11px sans-serif";
+
+  const xStep = (V.x1 - V.x0) > 12 ? 2 : 1;
+  for (let x = Math.ceil(V.x0 / xStep) * xStep; x <= V.x1; x += xStep) {
+    ctx.beginPath(); ctx.moveTo(X(x), 20); ctx.lineTo(X(x), chh - 30); ctx.stroke();
+    if (x !== 0) ctx.fillText(String(x), X(x) - 4, Y(0) + 14);
+  }
+  const yStep = (V.y1 - V.y0) > 12 ? 2 : 1;
+  for (let y = Math.ceil(V.y0 / yStep) * yStep; y <= V.y1; y += yStep) {
+    ctx.beginPath(); ctx.moveTo(40, Y(y)); ctx.lineTo(cw - 20, Y(y)); ctx.stroke();
+    if (y !== 0) ctx.fillText(String(y), 18, Y(y) + 4);
+  }
+
+  ctx.strokeStyle = "#94a3b8"; ctx.lineWidth = 1.8;
+  if (V.y0 <= 0 && V.y1 >= 0) {
+    ctx.beginPath(); ctx.moveTo(40, Y(0)); ctx.lineTo(cw - 20, Y(0)); ctx.stroke();
+    ctx.fillText("x", cw - 30, Y(0) - 6);
+  }
+  if (V.x0 <= 0 && V.x1 >= 0) {
+    ctx.beginPath(); ctx.moveTo(X(0), 20); ctx.lineTo(X(0), chh - 30); ctx.stroke();
+    ctx.fillText("y", X(0) + 6, 32);
+  }
+  ctx.fillText("O", X(0) - 12, Y(0) + 14);
+  ctx.restore();
+}
+
+function drawHandle(x, y, radius = 7, label = "") {
+  ctx.save();
+  const pul = 0.5 + 0.5 * Math.sin(performance.now() / 200);
+  ctx.fillStyle = "#facc15";
+  ctx.shadowColor = "#facc15";
+  ctx.shadowBlur = 10 + 8 * pul;
+  ctx.beginPath();
+  ctx.arc(X(x), Y(y), radius, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 2; ctx.stroke();
+  ctx.restore();
+
+  if (label) {
+    ctx.fillStyle = "#facc15";
+    ctx.font = "bold 13px sans-serif";
+    ctx.fillText(label, X(x) + 10, Y(y) - 8);
+  }
+}
+
+function drawPill(text, x, y, col) {
+  ctx.save();
+  ctx.font = "800 12.5px sans-serif";
+  const w = ctx.measureText(text).width + 14;
+  const h = 22;
+  const px = clamp(x - w / 2, 4, cw - w - 4);
+  const py = clamp(y - h / 2, 4, chh - h - 4);
+  ctx.fillStyle = "rgba(15, 23, 42, 0.9)";
+  ctx.strokeStyle = col;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.roundRect(px, py, w, h, 6); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = col;
+  ctx.fillText(text, px + 7, py + 15);
+  ctx.restore();
+}
+
+function draw() {
+  if (cur === 0) V = { x0: -6, x1: 6, y0: -8, y1: 4 };
+  else if (cur === 1) V = { x0: -1, x1: 7, y0: -1, y1: 7 };
+  else if (cur === 2) V = { x0: -1, x1: 10, y0: -1, y1: 10 };
+  else if (cur === 3) V = { x0: -4, x1: 5, y0: -2, y1: 5 };
+
+  ctx.clearRect(0, 0, cw, chh);
+  ctx.fillStyle = "#0b1226";
+  ctx.fillRect(0, 0, cw, chh);
+
+  drawAxes();
+
+  if (cur === 0) {
+    const k = K.k !== undefined ? K.k : -2;
+    // 점근선
+    ctx.save(); ctx.setLineDash([5, 5]); ctx.strokeStyle = "rgba(148, 163, 184, 0.4)";
+    ctx.beginPath(); ctx.moveTo(X(-1), 20); ctx.lineTo(X(-1), chh - 30); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(40, Y(-2)); ctx.lineTo(cw - 20, Y(-2)); ctx.stroke();
+    ctx.restore();
+
+    // 곡선
+    ctx.save(); ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    for (let px = 40; px <= X(-1.08); px += 2) {
+      const x = iX(px); const y = 1 / (x + 1) - 2;
+      px === 40 ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
+    }
+    ctx.stroke();
+    ctx.beginPath();
+    let first = true;
+    for (let px = X(-0.92); px <= cw - 20; px += 2) {
+      const x = iX(px); const y = 1 / (x + 1) - 2;
+      first ? (ctx.moveTo(px, Y(y)), first = false) : ctx.lineTo(px, Y(y));
+    }
+    ctx.stroke(); ctx.restore();
+
+    // 직선
+    ctx.save(); ctx.strokeStyle = "#f43f5e"; ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(X(V.x0), Y(k * (V.x0 - 1) - 6));
+    ctx.lineTo(X(V.x1), Y(k * (V.x1 - 1) - 6));
+    ctx.stroke(); ctx.restore();
+
+    // 정점
+    ctx.fillStyle = "#fb923c";
+    ctx.beginPath(); ctx.arc(X(1), Y(-6), 6, 0, Math.PI * 2); ctx.fill();
+
+    const hx = 2.5, hy = k * (hx - 1) - 6;
+    drawHandle(hx, hy, 7, `k = ${k.toFixed(1)}`);
+    drawPill("곡선 y = (−2x−1)/(x+1)", X(2), Y(-1.2), "#38bdf8");
+    drawPill(`직선 y = ${k.toFixed(1)}(x−1)−6`, X(hx - 0.5), Y(hy + 1.2), "#f43f5e");
+  } else if (cur === 1) {
+    ctx.save(); ctx.setLineDash([6, 5]); ctx.strokeStyle = "rgba(250, 204, 21, 0.5)";
+    ctx.beginPath(); ctx.moveTo(X(0), Y(0)); ctx.lineTo(X(6), Y(6)); ctx.stroke(); ctx.restore();
+
+    ctx.save(); ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    for (let px = X(0.4); px <= cw - 20; px += 2) {
+      const x = iX(px); const y = 4 / x;
+      px === X(0.4) ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
+    }
+    ctx.stroke(); ctx.restore();
+
+    const a = K.a || 1.035; const b = 4 / a;
+    ctx.save(); ctx.strokeStyle = "#f43f5e"; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.moveTo(X(a - 0.6), Y(b + 0.6)); ctx.lineTo(X(b + 0.6), Y(a - 0.6)); ctx.stroke(); ctx.restore();
+
+    drawHandle(a, b, 7, "A");
+    ctx.fillStyle = "#38bdf8";
+    ctx.beginPath(); ctx.arc(X(b), Y(a), 6, 0, Math.PI * 2); ctx.fill();
+    ctx.fillText("B", X(b) + 8, Y(a) - 6);
+
+    const AB = Math.hypot(b - a, a - b);
+    drawPill("y = 4/x", X(4.5), Y(1.5), "#38bdf8");
+    drawPill("대칭축 y = x", X(5), Y(5), "#facc15");
+    drawPill(`선분 AB = ${AB.toFixed(1)}`, X((a + b) / 2), Y((a + b) / 2 + 0.8), "#f43f5e");
+  } else if (cur === 2) {
+    ctx.save(); ctx.setLineDash([5, 5]); ctx.strokeStyle = "rgba(148, 163, 184, 0.4)";
+    ctx.beginPath(); ctx.moveTo(X(2), 20); ctx.lineTo(X(2), chh - 30); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(40, Y(2)); ctx.lineTo(cw - 20, Y(2)); ctx.stroke(); ctx.restore();
+
+    ctx.save(); ctx.setLineDash([6, 5]); ctx.strokeStyle = "rgba(250, 204, 21, 0.4)";
+    ctx.beginPath(); ctx.moveTo(X(0), Y(0)); ctx.lineTo(X(9), Y(9)); ctx.stroke(); ctx.restore();
+
+    ctx.save(); ctx.strokeStyle = "#f43f5e"; ctx.lineWidth = 2.5;
+    ctx.beginPath(); ctx.moveTo(X(0), Y(8)); ctx.lineTo(X(8), Y(0)); ctx.stroke(); ctx.restore();
+
+    ctx.save(); ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    for (let px = X(2.2); px <= cw - 20; px += 2) {
+      const x = iX(px); const y = 2 + 2 / (x - 2);
+      px === X(2.2) ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
+    }
+    ctx.stroke(); ctx.restore();
+
+    const xP = 4 - Math.sqrt(2), yP = 4 + Math.sqrt(2);
+    const xQ = 4 + Math.sqrt(2), yQ = 4 - Math.sqrt(2);
+    drawHandle(xP, yP, 7, "P");
+    ctx.fillStyle = "#38bdf8";
+    ctx.beginPath(); ctx.arc(X(xQ), Y(yQ), 6, 0, Math.PI * 2); ctx.fill();
+    ctx.fillText("Q", X(xQ) + 8, Y(yQ) - 6);
+
+    drawPill("x + y = 8", X(7), Y(1.5), "#f43f5e");
+    drawPill("xy − 2x − 2y = −2", X(7), Y(3), "#38bdf8");
+    drawPill("대칭축 y = x", X(7), Y(7), "#facc15");
+  } else if (cur === 3) {
+    ctx.save(); ctx.setLineDash([6, 5]); ctx.strokeStyle = "rgba(250, 204, 21, 0.4)";
+    ctx.beginPath(); ctx.moveTo(X(-3), Y(-3)); ctx.lineTo(X(4), Y(4)); ctx.stroke(); ctx.restore();
+
+    ctx.save(); ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    for (let px = X(0.3); px <= cw - 20; px += 2) {
+      const x = iX(px); const y = 2 / x;
+      px === X(0.3) ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
+    }
+    ctx.stroke(); ctx.restore();
+
+    const al = K.alpha || 2.732; const be = 2 / al;
+
+    ctx.save();
+    ctx.fillStyle = "rgba(167, 139, 250, 0.25)";
+    ctx.strokeStyle = "#a78bfa";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(X(-2), Y(2)); ctx.lineTo(X(al), Y(be)); ctx.lineTo(X(be), Y(al)); ctx.closePath();
+    ctx.fill(); ctx.stroke(); ctx.restore();
+
+    ctx.fillStyle = "#f43f5e";
+    ctx.beginPath(); ctx.arc(X(-2), Y(2), 6, 0, Math.PI * 2); ctx.fill();
+    ctx.fillText("A(−2, 2)", X(-2) - 48, Y(2) - 8);
+
+    drawHandle(al, be, 7, "B(α, β)");
+    ctx.fillStyle = "#38bdf8";
+    ctx.beginPath(); ctx.arc(X(be), Y(al), 6, 0, Math.PI * 2); ctx.fill();
+    ctx.fillText("C(β, α)", X(be) - 42, Y(al) - 6);
+
+    const triArea = 0.5 * (al * al - be * be);
+    drawPill("y = 2/x", X(4), Y(0.8), "#38bdf8");
+    drawPill("y = x 대칭", X(3.8), Y(3.8), "#facc15");
+    drawPill(`△ABC 넓이 = ${triArea.toFixed(2)}`, X(0.5), Y(1.8), "#a78bfa");
+  }
+
+  requestAnimationFrame(draw);
+}
+
+/* 드래그 이벤트 */
+function getCanvasPos(e) {
+  const rect = cv.getBoundingClientRect();
+  const cx = e.touches ? e.touches[0].clientX : e.clientX;
+  const cy = e.touches ? e.touches[0].clientY : e.clientY;
+  return { x: cx - rect.left, y: cy - rect.top };
+}
+cv.addEventListener("mousedown", () => drag = true);
+cv.addEventListener("touchstart", (e) => {
+  drag = true;
+  if (e.cancelable) e.preventDefault();
+}, { passive: false });
+window.addEventListener("mouseup", () => drag = false);
+window.addEventListener("touchend", () => drag = false);
+window.addEventListener("touchcancel", () => drag = false);
+window.addEventListener("mousemove", onMove);
+window.addEventListener("touchmove", onMove, { passive: false });
+
+function onMove(e) {
+  if (!drag) return;
+  if (e.cancelable) e.preventDefault();
+  const p = getCanvasPos(e);
+  const mx = iX(p.x), my = iY(p.y);
+
+  if (cur === 0) {
+    const dx = mx - 1, dy = my - (-6);
+    if (Math.abs(dx) > 0.1) {
+      K.k = clamp(dy / dx, -8, 5);
+      renderVar();
+    }
+  } else if (cur === 1) {
+    K.a = clamp(mx, 0.5, 2.0);
+    renderVar();
+  } else if (cur === 3) {
+    K.alpha = clamp(mx, 1.45, 3.8);
+    renderVar();
+  }
+}
+
+// 초기화 실행
+setMode(0);
+draw();
+setTimeout(renderMath, 150);
+window.addEventListener("DOMContentLoaded", () => setTimeout(renderMath, 200));
+</script>
+</body>
+</html>
