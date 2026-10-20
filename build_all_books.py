@@ -31,13 +31,19 @@ with open('c:/Users/Admin/Desktop/문제집작업/parsed_rpm_calc2.json', 'r', e
 with open('c:/Users/Admin/Desktop/문제집작업/parsed_mock_calc.json', 'r', encoding='utf-8') as f:
     d_mock_calc = json.load(f)
 
-print(f"Loaded datasets: Gongsu2 ({len(d_gongsu2['probs'])}), Gongsu1 ({len(d_gongsu1['probs'])}), Daesu ({len(d_daesu['probs'])}), RPM_Geom ({len(d_rpm['probs'])}), RPM_Gongsu2 ({len(d_rpm_g2['probs'])}), RPM_Gongsu1 ({len(d_rpm_g1['probs'])}), RPM_Daesu ({len(d_rpm_daesu['probs'])}), RPM_Calc1 ({len(d_rpm_calc1['probs'])}), RPM_Calc2 ({len(d_rpm_calc2['probs'])}), Mock_Calc ({len(d_mock_calc['probs'])})")
+with open('c:/Users/Admin/Desktop/문제집작업/parsed_rpm_mid1_2.json', 'r', encoding='utf-8') as f:
+    d_rpm_mid1_2 = json.load(f)
+
+with open('c:/Users/Admin/Desktop/문제집작업/parsed_rpm_mid2_2.json', 'r', encoding='utf-8') as f:
+    d_rpm_mid2_2 = json.load(f)
+
+print(f"Loaded datasets: Gongsu2 ({len(d_gongsu2['probs'])}), Gongsu1 ({len(d_gongsu1['probs'])}), Daesu ({len(d_daesu['probs'])}), RPM_Geom ({len(d_rpm['probs'])}), RPM_Gongsu2 ({len(d_rpm_g2['probs'])}), RPM_Gongsu1 ({len(d_rpm_g1['probs'])}), RPM_Daesu ({len(d_rpm_daesu['probs'])}), RPM_Calc1 ({len(d_rpm_calc1['probs'])}), RPM_Calc2 ({len(d_rpm_calc2['probs'])}), RPM_Mid1_2 ({len(d_rpm_mid1_2['probs'])}), RPM_Mid2_2 ({len(d_rpm_mid2_2['probs'])}), Mock_Calc ({len(d_mock_calc['probs'])})")
 
 # 10개 교재 메타데이터 (시리즈별 및 교육과정 순서 정렬)
 ALL_BOOKS_CONFIG = {
     "gongsu1": {
         "series": "gojaengi",
-        "seriesName": "유형내신 고쟁이",
+        "seriesName": "고등 고쟁이",
         "seriesIcon": "📘",
         "subjectName": "공통수학1",
         "title": "유형내신 고쟁이 공통수학1",
@@ -51,7 +57,7 @@ ALL_BOOKS_CONFIG = {
     },
     "gongsu2": {
         "series": "gojaengi",
-        "seriesName": "유형내신 고쟁이",
+        "seriesName": "고등 고쟁이",
         "seriesIcon": "📘",
         "subjectName": "공통수학2",
         "title": "유형내신 고쟁이 공통수학2",
@@ -65,7 +71,7 @@ ALL_BOOKS_CONFIG = {
     },
     "daesu": {
         "series": "gojaengi",
-        "seriesName": "유형내신 고쟁이",
+        "seriesName": "고등 고쟁이",
         "seriesIcon": "📘",
         "subjectName": "대수",
         "title": "유형내신 고쟁이 대수",
@@ -79,7 +85,7 @@ ALL_BOOKS_CONFIG = {
     },
     "rpm_gongsu1": {
         "series": "rpm",
-        "seriesName": "개념원리 RPM",
+        "seriesName": "고등 RPM",
         "seriesIcon": "📙",
         "subjectName": "공통수학1",
         "title": "개념원리 RPM 공통수학1",
@@ -93,7 +99,7 @@ ALL_BOOKS_CONFIG = {
     },
     "rpm_gongsu2": {
         "series": "rpm",
-        "seriesName": "개념원리 RPM",
+        "seriesName": "고등 RPM",
         "seriesIcon": "📙",
         "subjectName": "공통수학2",
         "title": "개념원리 RPM 공통수학2",
@@ -107,7 +113,7 @@ ALL_BOOKS_CONFIG = {
     },
     "rpm_daesu": {
         "series": "rpm",
-        "seriesName": "개념원리 RPM",
+        "seriesName": "고등 RPM",
         "seriesIcon": "📙",
         "subjectName": "대수",
         "title": "개념원리 RPM 대수 (2022개정)",
@@ -121,7 +127,7 @@ ALL_BOOKS_CONFIG = {
     },
     "rpm_calc1": {
         "series": "rpm",
-        "seriesName": "개념원리 RPM",
+        "seriesName": "고등 RPM",
         "seriesIcon": "📙",
         "subjectName": "미적분1",
         "title": "개념원리 RPM 미적분1 (2022개정)",
@@ -135,7 +141,7 @@ ALL_BOOKS_CONFIG = {
     },
     "rpm_calc2": {
         "series": "rpm",
-        "seriesName": "개념원리 RPM",
+        "seriesName": "고등 RPM",
         "seriesIcon": "📙",
         "subjectName": "미적분2",
         "title": "개념원리 RPM 미적분2 (2022개정)",
@@ -149,7 +155,7 @@ ALL_BOOKS_CONFIG = {
     },
     "rpm_geom": {
         "series": "rpm",
-        "seriesName": "개념원리 RPM",
+        "seriesName": "고등 RPM",
         "seriesIcon": "📙",
         "subjectName": "기하",
         "title": "개념원리 RPM 기하",
@@ -160,6 +166,34 @@ ALL_BOOKS_CONFIG = {
         "defaultQid": "0001",
         "pages": d_rpm["pages"],
         "probs": d_rpm["probs"]
+    },
+    "rpm_mid1_2": {
+        "series": "rpm_mid",
+        "seriesName": "중등 RPM",
+        "seriesIcon": "📗",
+        "subjectName": "중학 1-2",
+        "title": "개념원리 RPM 중학 수학 1-2 (2022개정)",
+        "shortTitle": "RPM 중1-2",
+        "badge": "2022개정 중1-2 신규 등록",
+        "units": ["all", "01 기본 도형", "02 위치 관계", "03 작도와 합동", "04 다각형", "05 원과 부채꼴", "06 다면체와 회전체", "07 입체도형의 겉넓이와 부피", "08 대푯값", "09 도수분포표와 상대도수", "10 부록 대표문제"],
+        "defaultPage": 9,
+        "defaultQid": "0001",
+        "pages": d_rpm_mid1_2["pages"],
+        "probs": d_rpm_mid1_2["probs"]
+    },
+    "rpm_mid2_2": {
+        "series": "rpm_mid",
+        "seriesName": "중등 RPM",
+        "seriesIcon": "📗",
+        "subjectName": "중학 2-2",
+        "title": "개념원리 RPM 중학 수학 2-2 (2022개정)",
+        "shortTitle": "RPM 중2-2",
+        "badge": "2022개정 중2-2 신규 등록",
+        "units": ["all", "01 삼각형의 성질", "02 삼각형의 외심과 내심", "03 평행사변형", "04 여러 가지 사각형", "05 도형의 닮음", "06 평행선과 선분의 비", "07 삼각형의 무게중심", "08 피타고라스 정리", "09 경우의 수", "10 확률", "11 부록 대표문제"],
+        "defaultPage": 9,
+        "defaultQid": "0001",
+        "pages": d_rpm_mid2_2["pages"],
+        "probs": d_rpm_mid2_2["probs"]
     },
     "mock_calc": {
         "series": "mock",
@@ -372,6 +406,7 @@ body{
 .mega-col-hd{font-size:0.84rem;font-weight:800;padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid #192746;display:flex;align-items:center;justify-content:space-between}
 .col-gojaengi{color:#38bdf8}
 .col-rpm{color:#fb923c}
+.col-mid{color:#4ade80}
 .col-mock{color:#f472b6}
 .mega-items{display:flex;flex-direction:column;gap:6px}
 .mega-item{background:#141f38;border:1px solid #203154;border-radius:8px;padding:8px 12px;color:#e2e8f0;cursor:pointer;display:flex;justify-content:space-between;align-items:center;text-align:left;transition:all .15s ease}
@@ -748,23 +783,28 @@ canvas{
       <div class="series-tabs">
         <button class="series-btn active" data-series="gojaengi" onclick="selectSeries('gojaengi')">
           <span>📘</span>
-          <span>유형내신 고쟁이</span>
+          <span>고등 고쟁이</span>
           <span class="badge-count">3권</span>
         </button>
         <button class="series-btn" data-series="rpm" onclick="selectSeries('rpm')">
           <span>📙</span>
-          <span>개념원리 RPM</span>
+          <span>고등 RPM</span>
           <span class="badge-count">6권</span>
+        </button>
+        <button class="series-btn" data-series="rpm_mid" onclick="selectSeries('rpm_mid')">
+          <span>📗</span>
+          <span>중등 RPM</span>
+          <span class="badge-count">2권</span>
         </button>
         <button class="series-btn" data-series="mock" onclick="selectSeries('mock')">
           <span>🎯</span>
-          <span>수능·모의고사</span>
+          <span>수능·모의</span>
           <span class="badge-count">1권</span>
         </button>
       </div>
 
-      <button class="all-books-btn" id="allBooksBtn" onclick="toggleBookMenu()" title="전체 10개 교재 일람">
-        <span>📚 전체 10권 일람</span>
+      <button class="all-books-btn" id="allBooksBtn" onclick="toggleBookMenu()" title="전체 12개 교재 일람">
+        <span>📚 전체 12권 일람</span>
         <span id="menuArrow">▾</span>
       </button>
     </div>
@@ -772,20 +812,24 @@ canvas{
     <!-- 2단: 선택된 시리즈의 세부 과목 선택 바 -->
     <div class="nav-subject-row" id="subjectBar"></div>
 
-    <!-- 전체 10권 한눈에 보기 메가 메뉴 -->
+    <!-- 전체 12권 한눈에 보기 메가 메뉴 -->
     <div class="book-mega-menu" id="bookMegaMenu" style="display:none">
       <div class="mega-header">
-        <div class="mega-title">📚 고등수학 전체 10권 교재 바로가기</div>
+        <div class="mega-title">📚 중·고등 수학 전체 12권 교재 바로가기</div>
         <button class="mega-close" onclick="toggleBookMenu(false)">✕ 닫기</button>
       </div>
       <div class="mega-grid">
         <div class="mega-col">
-          <div class="mega-col-hd col-gojaengi"><span>📘 유형내신 고쟁이</span> <span>3권</span></div>
+          <div class="mega-col-hd col-gojaengi"><span>📘 고등 고쟁이</span> <span>3권</span></div>
           <div class="mega-items" id="megaGojaengi"></div>
         </div>
         <div class="mega-col">
-          <div class="mega-col-hd col-rpm"><span>📙 개념원리 RPM</span> <span>6권</span></div>
+          <div class="mega-col-hd col-rpm"><span>📙 고등 RPM</span> <span>6권</span></div>
           <div class="mega-items" id="megaRpm"></div>
+        </div>
+        <div class="mega-col">
+          <div class="mega-col-hd col-mid"><span>📗 중등 RPM</span> <span>2권</span></div>
+          <div class="mega-items" id="megaRpmMid"></div>
         </div>
         <div class="mega-col">
           <div class="mega-col-hd col-mock"><span>🎯 수능·실전모의</span> <span>1권</span></div>
@@ -926,9 +970,11 @@ function renderSubjectBar() {
 function renderMegaMenu() {
   const colG = $("#megaGojaengi");
   const colR = $("#megaRpm");
+  const colMid = $("#megaRpmMid");
   const colM = $("#megaMock");
   if (!colG || !colR || !colM) return;
   colG.innerHTML = ""; colR.innerHTML = ""; colM.innerHTML = "";
+  if (colMid) colMid.innerHTML = "";
 
   Object.entries(BOOKS_DATA).forEach(([bKey, b]) => {
     const item = document.createElement("button");
@@ -945,6 +991,7 @@ function renderMegaMenu() {
     const s = b.series || "gojaengi";
     if (s === "gojaengi") colG.appendChild(item);
     else if (s === "rpm") colR.appendChild(item);
+    else if (s === "rpm_mid" && colMid) colMid.appendChild(item);
     else colM.appendChild(item);
   });
 }
@@ -1562,7 +1609,7 @@ with open('c:/Users/Admin/Desktop/문제집작업/index.html', 'w', encoding='ut
 print("Generated index.html successfully!")
 
 # 개별 뷰어 저장
-for b_key in ["gongsu1", "daesu", "rpm_geom", "rpm_gongsu2", "rpm_gongsu1", "rpm_daesu", "rpm_calc1", "rpm_calc2", "mock_calc"]:
+for b_key in ["gongsu1", "daesu", "rpm_geom", "rpm_gongsu2", "rpm_gongsu1", "rpm_daesu", "rpm_calc1", "rpm_calc2", "rpm_mid1_2", "rpm_mid2_2", "mock_calc"]:
     custom_html = final_html.replace('switchBook("gongsu2");', f'switchBook("{b_key}");')
     target_name = f"gojaengi_{b_key}.html" if ("gong" in b_key or "dae" in b_key) and "rpm" not in b_key else f"{b_key}.html"
     with open(f'c:/Users/Admin/Desktop/문제집작업/{target_name}', 'w', encoding='utf-8') as f:
