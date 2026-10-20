@@ -33,9 +33,13 @@ with open('c:/Users/Admin/Desktop/문제집작업/parsed_mock_calc.json', 'r', e
 
 print(f"Loaded datasets: Gongsu2 ({len(d_gongsu2['probs'])}), Gongsu1 ({len(d_gongsu1['probs'])}), Daesu ({len(d_daesu['probs'])}), RPM_Geom ({len(d_rpm['probs'])}), RPM_Gongsu2 ({len(d_rpm_g2['probs'])}), RPM_Gongsu1 ({len(d_rpm_g1['probs'])}), RPM_Daesu ({len(d_rpm_daesu['probs'])}), RPM_Calc1 ({len(d_rpm_calc1['probs'])}), RPM_Calc2 ({len(d_rpm_calc2['probs'])}), Mock_Calc ({len(d_mock_calc['probs'])})")
 
-# 6개 교재 메타데이터
+# 10개 교재 메타데이터 (시리즈별 및 교육과정 순서 정렬)
 ALL_BOOKS_CONFIG = {
     "gongsu1": {
+        "series": "gojaengi",
+        "seriesName": "유형내신 고쟁이",
+        "seriesIcon": "📘",
+        "subjectName": "공통수학1",
         "title": "유형내신 고쟁이 공통수학1",
         "shortTitle": "고쟁이 공통수학1",
         "badge": "고쟁이 공수1",
@@ -46,6 +50,10 @@ ALL_BOOKS_CONFIG = {
         "probs": d_gongsu1["probs"]
     },
     "gongsu2": {
+        "series": "gojaengi",
+        "seriesName": "유형내신 고쟁이",
+        "seriesIcon": "📘",
+        "subjectName": "공통수학2",
         "title": "유형내신 고쟁이 공통수학2",
         "shortTitle": "고쟁이 공통수학2",
         "badge": "고쟁이 공수2",
@@ -56,6 +64,10 @@ ALL_BOOKS_CONFIG = {
         "probs": d_gongsu2["probs"]
     },
     "daesu": {
+        "series": "gojaengi",
+        "seriesName": "유형내신 고쟁이",
+        "seriesIcon": "📘",
+        "subjectName": "대수",
         "title": "유형내신 고쟁이 대수",
         "shortTitle": "고쟁이 대수",
         "badge": "고쟁이 대수",
@@ -65,27 +77,11 @@ ALL_BOOKS_CONFIG = {
         "pages": d_daesu["pages"],
         "probs": d_daesu["probs"]
     },
-    "rpm_geom": {
-        "title": "개념원리 RPM 기하",
-        "shortTitle": "RPM 기하",
-        "badge": "RPM 기하",
-        "units": ["all", "01 이차곡선 (포물선·타원·쌍곡선)", "02 평면벡터", "03 공간도형과 공간좌표"],
-        "defaultPage": 8,
-        "defaultQid": "0001",
-        "pages": d_rpm["pages"],
-        "probs": d_rpm["probs"]
-    },
-    "rpm_gongsu2": {
-        "title": "개념원리 RPM 공통수학2",
-        "shortTitle": "RPM 공통수학2",
-        "badge": "사진 1·2 신규 등록",
-        "units": ["all", "01 평면좌표와 직선의 방정식", "02 원의 방정식과 도형의 이동", "03 집합과 명제", "04 함수와 역함수", "05 유리함수와 무리함수"],
-        "defaultPage": 7,
-        "defaultQid": "0001",
-        "pages": d_rpm_g2["pages"],
-        "probs": d_rpm_g2["probs"]
-    },
     "rpm_gongsu1": {
+        "series": "rpm",
+        "seriesName": "개념원리 RPM",
+        "seriesIcon": "📙",
+        "subjectName": "공통수학1",
         "title": "개념원리 RPM 공통수학1",
         "shortTitle": "RPM 공통수학1",
         "badge": "사진 1 신규 등록",
@@ -95,7 +91,25 @@ ALL_BOOKS_CONFIG = {
         "pages": d_rpm_g1["pages"],
         "probs": d_rpm_g1["probs"]
     },
+    "rpm_gongsu2": {
+        "series": "rpm",
+        "seriesName": "개념원리 RPM",
+        "seriesIcon": "📙",
+        "subjectName": "공통수학2",
+        "title": "개념원리 RPM 공통수학2",
+        "shortTitle": "RPM 공통수학2",
+        "badge": "사진 1·2 신규 등록",
+        "units": ["all", "01 평면좌표와 직선의 방정식", "02 원의 방정식과 도형의 이동", "03 집합과 명제", "04 함수와 역함수", "05 유리함수와 무리함수"],
+        "defaultPage": 7,
+        "defaultQid": "0001",
+        "pages": d_rpm_g2["pages"],
+        "probs": d_rpm_g2["probs"]
+    },
     "rpm_daesu": {
+        "series": "rpm",
+        "seriesName": "개념원리 RPM",
+        "seriesIcon": "📙",
+        "subjectName": "대수",
         "title": "개념원리 RPM 대수 (2022개정)",
         "shortTitle": "RPM 대수",
         "badge": "2022개정 신규 등록",
@@ -106,6 +120,10 @@ ALL_BOOKS_CONFIG = {
         "probs": d_rpm_daesu["probs"]
     },
     "rpm_calc1": {
+        "series": "rpm",
+        "seriesName": "개념원리 RPM",
+        "seriesIcon": "📙",
+        "subjectName": "미적분1",
         "title": "개념원리 RPM 미적분1 (2022개정)",
         "shortTitle": "RPM 미적분1",
         "badge": "2022개정 신규 등록",
@@ -116,6 +134,10 @@ ALL_BOOKS_CONFIG = {
         "probs": d_rpm_calc1["probs"]
     },
     "rpm_calc2": {
+        "series": "rpm",
+        "seriesName": "개념원리 RPM",
+        "seriesIcon": "📙",
+        "subjectName": "미적분2",
         "title": "개념원리 RPM 미적분2 (2022개정)",
         "shortTitle": "RPM 미적분2",
         "badge": "2022개정 신규 등록",
@@ -125,7 +147,25 @@ ALL_BOOKS_CONFIG = {
         "pages": d_rpm_calc2["pages"],
         "probs": d_rpm_calc2["probs"]
     },
+    "rpm_geom": {
+        "series": "rpm",
+        "seriesName": "개념원리 RPM",
+        "seriesIcon": "📙",
+        "subjectName": "기하",
+        "title": "개념원리 RPM 기하",
+        "shortTitle": "RPM 기하",
+        "badge": "RPM 기하",
+        "units": ["all", "01 이차곡선 (포물선·타원·쌍곡선)", "02 평면벡터", "03 공간도형과 공간좌표"],
+        "defaultPage": 8,
+        "defaultQid": "0001",
+        "pages": d_rpm["pages"],
+        "probs": d_rpm["probs"]
+    },
     "mock_calc": {
+        "series": "mock",
+        "seriesName": "수능·모의고사",
+        "seriesIcon": "🎯",
+        "subjectName": "미적분 15제",
         "title": "261020 수능&모의 미적분 실전 모의고사",
         "shortTitle": "수능·모의 미적분",
         "badge": "실전 15제 신규 등록",
@@ -187,44 +227,159 @@ body{
 }
 
 /* 상단 교재 선택 바: 모바일/태블릿에서 부드러운 가로 스와이프 터치 스크롤 */
-.book-tabs{
-  display:flex;
-  gap:clamp(6px, 1.2vw, 10px);
+/* 상단 교재 네비게이션: 2단계 계층형 정리정돈 레이아웃 */
+.book-nav-wrap{
   margin-bottom:12px;
-  background:#090d1a;
-  padding:clamp(6px, 1.2vw, 10px);
-  border-radius:clamp(10px, 1.8vw, 14px);
-  border:1.5px solid var(--line);
-  overflow-x:auto;
-  flex-wrap:nowrap;
-  -webkit-overflow-scrolling:touch;
-  scrollbar-width:none;
+  background:#090e1c;
+  border:1.5px solid #1f2e4d;
+  border-radius:clamp(12px, 2vw, 16px);
+  padding:clamp(8px, 1.4vw, 12px);
+  position:relative;
+  box-shadow:0 8px 24px rgba(0,0,0,0.35);
 }
-.book-tabs::-webkit-scrollbar{display:none}
-.book-tab{
-  background:#141f38;
-  color:var(--tx);
-  border:1.5px solid var(--line);
+.nav-series-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:8px;
+  padding-bottom:10px;
+  border-bottom:1px solid #172442;
+}
+.series-tabs{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  align-items:center;
+}
+.series-btn{
+  background:#111a30;
+  color:#94a3b8;
+  border:1.5px solid #203154;
   border-radius:9px;
-  padding:clamp(8px, 1.4vw, 10px) clamp(12px, 1.8vw, 18px);
-  font-size:clamp(0.82rem, 1.6vw, 0.95rem);
+  padding:clamp(6px, 1.2vw, 8px) clamp(10px, 1.6vw, 14px);
+  font-size:clamp(0.78rem, 1.4vw, 0.88rem);
+  font-weight:700;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  transition:all .15s ease;
+  touch-action:manipulation;
+}
+.series-btn:hover{background:#192748;color:#f1f5f9;border-color:#38bdf8}
+.series-btn.active{
+  background:#19284d;
+  color:#38bdf8;
+  border-color:#38bdf8;
+  font-weight:800;
+  box-shadow:0 0 14px rgba(56,189,248,.25);
+}
+.series-btn .badge-count{
+  font-size:0.7rem;
+  background:#090e1c;
+  color:#64748b;
+  padding:2px 7px;
+  border-radius:999px;
+  border:1px solid #1e293b;
+}
+.series-btn.active .badge-count{
+  background:rgba(56,189,248,.15);
+  color:#38bdf8;
+  border-color:rgba(56,189,248,.4);
+}
+.all-books-btn{
+  background:linear-gradient(135deg, #1e293b, #0f172a);
+  color:#facc15;
+  border:1.2px solid #eab308;
+  border-radius:9px;
+  padding:clamp(6px, 1.2vw, 8px) clamp(10px, 1.5vw, 14px);
+  font-size:clamp(0.76rem, 1.3vw, 0.84rem);
   font-weight:800;
   cursor:pointer;
   display:flex;
   align-items:center;
-  gap:8px;
-  transition:.15s;
-  flex:0 0 auto;
-  white-space:nowrap;
+  gap:6px;
+  transition:all .15s ease;
   touch-action:manipulation;
+  margin-left:auto;
 }
-.book-tab:hover{border-color:#38bdf8;background:#1a294c}
-.book-tab.active{
+.all-books-btn:hover{background:#ca8a04;color:#000;box-shadow:0 0 16px rgba(250,204,21,.35)}
+.nav-subject-row{
+  display:flex;
+  gap:clamp(6px, 1.2vw, 8px);
+  padding-top:10px;
+  overflow-x:auto;
+  flex-wrap:wrap;
+  align-items:center;
+  scrollbar-width:none;
+}
+.nav-subject-row::-webkit-scrollbar{display:none}
+.subject-tab{
+  background:#111a30;
+  color:#cbd5e1;
+  border:1.5px solid #203154;
+  border-radius:9px;
+  padding:clamp(7px, 1.3vw, 9px) clamp(12px, 1.8vw, 16px);
+  font-size:clamp(0.82rem, 1.5vw, 0.92rem);
+  font-weight:700;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  transition:all .15s ease;
+  touch-action:manipulation;
+  white-space:nowrap;
+}
+.subject-tab .sub-dot{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#475569;
+  transition:all .15s ease;
+}
+.subject-tab:hover{background:#1a284a;border-color:#38bdf8;color:#fff}
+.subject-tab:hover .sub-dot{background:#38bdf8}
+.subject-tab.active{
   background:linear-gradient(135deg, #0284c7, #2563eb);
   color:#fff;
   border-color:#38bdf8;
-  box-shadow:0 0 16px rgba(56,189,248,.35);
+  font-weight:800;
+  box-shadow:0 4px 18px rgba(37,99,235,.45);
 }
+.subject-tab.active .sub-dot{background:#facc15;box-shadow:0 0 8px #facc15}
+.book-mega-menu{
+  position:absolute;
+  top:calc(100% + 8px);
+  left:0;
+  right:0;
+  background:#090e1c;
+  border:1.5px solid #283e68;
+  border-radius:14px;
+  padding:16px;
+  z-index:1000;
+  box-shadow:0 20px 40px rgba(0,0,0,0.65);
+  backdrop-filter:blur(12px);
+  animation:slideDown .18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes slideDown{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+.mega-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid #1a2744}
+.mega-title{font-size:0.95rem;font-weight:800;color:#facc15;display:flex;align-items:center;gap:6px}
+.mega-close{background:#1e293b;border:1px solid #334155;color:#94a3b8;border-radius:6px;padding:4px 10px;font-size:0.78rem;font-weight:700;cursor:pointer}
+.mega-close:hover{background:#ef4444;color:#fff;border-color:#ef4444}
+.mega-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(230px, 1fr));gap:12px}
+.mega-col{background:#0e1628;border:1px solid #1c2c4d;border-radius:10px;padding:12px}
+.mega-col-hd{font-size:0.84rem;font-weight:800;padding-bottom:8px;margin-bottom:8px;border-bottom:1px solid #192746;display:flex;align-items:center;justify-content:space-between}
+.col-gojaengi{color:#38bdf8}
+.col-rpm{color:#fb923c}
+.col-mock{color:#f472b6}
+.mega-items{display:flex;flex-direction:column;gap:6px}
+.mega-item{background:#141f38;border:1px solid #203154;border-radius:8px;padding:8px 12px;color:#e2e8f0;cursor:pointer;display:flex;justify-content:space-between;align-items:center;text-align:left;transition:all .15s ease}
+.mega-item:hover{background:#1f315a;border-color:#38bdf8;transform:translateX(4px)}
+.mega-item.active{background:linear-gradient(135deg, #0284c7, #2563eb);border-color:#38bdf8;color:#fff;font-weight:800}
+.mega-item .m-title{font-size:0.86rem;font-weight:700}
+.mega-item .m-sub{font-size:0.72rem;color:#94a3b8}
+.mega-item.active .m-sub{color:#e0f2fe}
 
 .hdr{
   display:flex;
@@ -586,18 +741,58 @@ canvas{
 </head>
 <body>
 <div class="wrap">
-  <!-- 상단 교재 선택 탭 -->
-  <div class="book-tabs">
-    <button class="book-tab" data-book="gongsu1" onclick="switchBook('gongsu1')">📘 고쟁이 공통수학1</button>
-    <button class="book-tab active" data-book="gongsu2" onclick="switchBook('gongsu2')">📗 고쟁이 공통수학2</button>
-    <button class="book-tab" data-book="daesu" onclick="switchBook('daesu')">📙 고쟁이 대수</button>
-    <button class="book-tab" data-book="rpm_geom" onclick="switchBook('rpm_geom')">📕 RPM 기하</button>
-    <button class="book-tab" data-book="rpm_gongsu2" onclick="switchBook('rpm_gongsu2')">📗 RPM 공통수학2</button>
-    <button class="book-tab" data-book="rpm_gongsu1" onclick="switchBook('rpm_gongsu1')">📘 RPM 공통수학1</button>
-    <button class="book-tab" data-book="rpm_daesu" onclick="switchBook('rpm_daesu')">📙 RPM 대수</button>
-    <button class="book-tab" data-book="rpm_calc1" onclick="switchBook('rpm_calc1')">📕 RPM 미적분1</button>
-    <button class="book-tab" data-book="rpm_calc2" onclick="switchBook('rpm_calc2')">📕 RPM 미적분2</button>
-    <button class="book-tab" data-book="mock_calc" onclick="switchBook('mock_calc')">🎯 수능·모의 미적분</button>
+  <!-- 상단 교재 선택 네비게이션: 2단계 계층형 정리정돈 레이아웃 -->
+  <div class="book-nav-wrap">
+    <!-- 1단: 시리즈 선택 세그먼트 -->
+    <div class="nav-series-row">
+      <div class="series-tabs">
+        <button class="series-btn active" data-series="gojaengi" onclick="selectSeries('gojaengi')">
+          <span>📘</span>
+          <span>유형내신 고쟁이</span>
+          <span class="badge-count">3권</span>
+        </button>
+        <button class="series-btn" data-series="rpm" onclick="selectSeries('rpm')">
+          <span>📙</span>
+          <span>개념원리 RPM</span>
+          <span class="badge-count">6권</span>
+        </button>
+        <button class="series-btn" data-series="mock" onclick="selectSeries('mock')">
+          <span>🎯</span>
+          <span>수능·모의고사</span>
+          <span class="badge-count">1권</span>
+        </button>
+      </div>
+
+      <button class="all-books-btn" id="allBooksBtn" onclick="toggleBookMenu()" title="전체 10개 교재 일람">
+        <span>📚 전체 10권 일람</span>
+        <span id="menuArrow">▾</span>
+      </button>
+    </div>
+
+    <!-- 2단: 선택된 시리즈의 세부 과목 선택 바 -->
+    <div class="nav-subject-row" id="subjectBar"></div>
+
+    <!-- 전체 10권 한눈에 보기 메가 메뉴 -->
+    <div class="book-mega-menu" id="bookMegaMenu" style="display:none">
+      <div class="mega-header">
+        <div class="mega-title">📚 고등수학 전체 10권 교재 바로가기</div>
+        <button class="mega-close" onclick="toggleBookMenu(false)">✕ 닫기</button>
+      </div>
+      <div class="mega-grid">
+        <div class="mega-col">
+          <div class="mega-col-hd col-gojaengi"><span>📘 유형내신 고쟁이</span> <span>3권</span></div>
+          <div class="mega-items" id="megaGojaengi"></div>
+        </div>
+        <div class="mega-col">
+          <div class="mega-col-hd col-rpm"><span>📙 개념원리 RPM</span> <span>6권</span></div>
+          <div class="mega-items" id="megaRpm"></div>
+        </div>
+        <div class="mega-col">
+          <div class="mega-col-hd col-mock"><span>🎯 수능·실전모의</span> <span>1권</span></div>
+          <div class="mega-items" id="megaMock"></div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="hdr">
@@ -697,12 +892,91 @@ let cv, ctx, cw, chh;
 let drag = false;
 let K = { k: -2, a: 1.0, alpha: 2.732 };
 
+let curSeries = "gojaengi";
+
+function selectSeries(seriesKey) {
+  curSeries = seriesKey;
+  renderSeriesTabs();
+  renderSubjectBar();
+}
+
+function renderSeriesTabs() {
+  $$(".series-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.series === curSeries);
+  });
+}
+
+function renderSubjectBar() {
+  const bar = $("#subjectBar");
+  if (!bar) return;
+  bar.innerHTML = "";
+  
+  const booksInSeries = Object.entries(BOOKS_DATA).filter(([k, b]) => (b.series || "gojaengi") === curSeries);
+  booksInSeries.forEach(([bKey, b]) => {
+    const btn = document.createElement("button");
+    const isActive = (bKey === curBookKey);
+    btn.className = "subject-tab" + (isActive ? " active" : "");
+    btn.setAttribute("data-book", bKey);
+    btn.innerHTML = `<span class="sub-dot"></span><span class="sub-name">${b.subjectName || b.shortTitle}</span>`;
+    btn.onclick = () => switchBook(bKey);
+    bar.appendChild(btn);
+  });
+}
+
+function renderMegaMenu() {
+  const colG = $("#megaGojaengi");
+  const colR = $("#megaRpm");
+  const colM = $("#megaMock");
+  if (!colG || !colR || !colM) return;
+  colG.innerHTML = ""; colR.innerHTML = ""; colM.innerHTML = "";
+
+  Object.entries(BOOKS_DATA).forEach(([bKey, b]) => {
+    const item = document.createElement("button");
+    const isActive = (bKey === curBookKey);
+    item.className = "mega-item" + (isActive ? " active" : "");
+    item.innerHTML = `
+      <div class="m-title">${b.seriesIcon || ''} ${b.subjectName || b.shortTitle}</div>
+      <div class="m-sub">${b.badge || ""}</div>
+    `;
+    item.onclick = () => {
+      toggleBookMenu(false);
+      switchBook(bKey);
+    };
+    const s = b.series || "gojaengi";
+    if (s === "gojaengi") colG.appendChild(item);
+    else if (s === "rpm") colR.appendChild(item);
+    else colM.appendChild(item);
+  });
+}
+
+function toggleBookMenu(force) {
+  const menu = $("#bookMegaMenu");
+  const arrow = $("#menuArrow");
+  if (!menu) return;
+  const isShow = typeof force === 'boolean' ? force : (menu.style.display === 'none' || !menu.style.display);
+  menu.style.display = isShow ? 'block' : 'none';
+  if (arrow) arrow.textContent = isShow ? '▴' : '▾';
+  if (isShow) renderMegaMenu();
+}
+
+document.addEventListener("click", (e) => {
+  const menu = $("#bookMegaMenu");
+  const btn = $("#allBooksBtn");
+  if (menu && menu.style.display !== 'none' && !menu.contains(e.target) && !btn.contains(e.target)) {
+    toggleBookMenu(false);
+  }
+});
+
 function switchBook(bookKey) {
   curBookKey = bookKey;
-  $$(".book-tab").forEach(tab => {
-    tab.classList.toggle("active", tab.dataset.book === bookKey);
-  });
   const book = BOOKS_DATA[bookKey];
+  if (!book) return;
+  curSeries = book.series || "gojaengi";
+  
+  renderSeriesTabs();
+  renderSubjectBar();
+  renderMegaMenu();
+
   $("#bookTitle").innerHTML = `${book.title} <span class="badge" id="bookBadge">${book.badge}</span>`;
   currentUnit = "all";
   currentPage = book.defaultPage;
