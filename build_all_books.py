@@ -663,6 +663,42 @@ h1{
   border-radius: 6px;
 }
 
+/* 대한민국 교과서식 <보 기> 상자 및 조건 상자 */
+.tb-bogi-box {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1.5px solid rgba(56, 189, 248, 0.35);
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin: 14px 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+.tb-bogi-title {
+  text-align: center;
+  font-weight: 900;
+  color: var(--cyan);
+  font-size: 0.88em;
+  margin-bottom: 8px;
+  letter-spacing: 3px;
+}
+.tb-bogi-item {
+  margin: 6px 0;
+  line-height: 1.75;
+  color: #f1f5f9;
+  font-size: 0.95em;
+}
+.tb-cond-box {
+  background: rgba(30, 41, 59, 0.45);
+  border-left: 3px solid var(--amber);
+  border-radius: 8px;
+  padding: 10px 14px;
+  margin: 12px 0;
+}
+.tb-cond-item {
+  margin: 5px 0;
+  line-height: 1.7;
+  color: #f1f5f9;
+}
+
 .card{
   background:var(--panel);
   border:2px solid var(--pnk);
@@ -1701,184 +1737,553 @@ function drawPill(text, px, py, color = "#facc15") {
   ctx.restore();
 }
 
+// --- 기하 도형 그리기 헬퍼 (일품 중등 2-2 전용) ---
+function drawGeometryProblem(p, qTxt) {
+  const isMode1 = (curModeIdx === 1);
+  const isMode2 = (curModeIdx === 2);
+  const themeColor = isMode1 ? "#f43f5e" : (isMode2 ? "#22d3ee" : "#38bdf8");
+
+  // 배경 미세 모눈 격자
+  ctx.save();
+  ctx.strokeStyle = "rgba(148, 163, 184, 0.08)";
+  ctx.lineWidth = 1;
+  const step = 25;
+  for (let x = 0; x < cw; x += step) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, chh); ctx.stroke();
+  }
+  for (let y = 0; y < chh; y += step) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(cw, y); ctx.stroke();
+  }
+  ctx.restore();
+
+  const cx = cw / 2;
+  const cy = chh / 2 + 10;
+
+  function pt(x, y, name, color = "#ffffff", ox = 0, oy = -10) {
+    ctx.save();
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(x, y, 4.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.font = "bold 13px 'NanumSquareNeo', 'Pretendard', sans-serif";
+    ctx.fillText(name, x + ox, y + oy);
+    ctx.restore();
+  }
+
+  function line(x1, y1, x2, y2, color = themeColor, width = 2.5, dashed = false) {
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width;
+    if (dashed) ctx.setLineDash([4, 4]);
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function rightAngle(px, py, dirX, dirY, size = 12) {
+    ctx.save();
+    ctx.strokeStyle = "#facc15";
+    ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.moveTo(px + dirX * size, py);
+    ctx.lineTo(px + dirX * size, py + dirY * size);
+    ctx.lineTo(px, py + dirY * size);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // 1) 외심 / 외접원
+  if (qTxt.includes("외심") || qTxt.includes("외접원")) {
+    const R = 110;
+    const oX = cx, oY = cy;
+    
+    // 외접원 (원 O)
+    ctx.save();
+    ctx.strokeStyle = "rgba(56, 189, 248, 0.4)";
+    ctx.lineWidth = 1.8;
+    ctx.setLineDash([3, 3]);
+    ctx.beginPath();
+    ctx.arc(oX, oY, R, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+
+    // 삼각형 ABC 꼭짓점 (원 위의 세 점)
+    const aX = oX + R * Math.cos(-Math.PI / 2.3);
+    const aY = oY + R * Math.sin(-Math.PI / 2.3);
+    const bX = oX + R * Math.cos(Math.PI * 0.78);
+    const bY = oY + R * Math.sin(Math.PI * 0.78);
+    const cX = oX + R * Math.cos(Math.PI * 0.18);
+    const cY = oY + R * Math.sin(Math.PI * 0.18);
+
+    line(aX, aY, bX, bY);
+    line(bX, bY, cX, cY);
+    line(cX, cY, aX, aY);
+
+    // 꼭짓점 연결 반지름 OA, OB, OC
+    line(oX, oY, aX, aY, "#facc15", 1.5, true);
+    line(oX, oY, bX, bY, "#facc15", 1.5, true);
+    line(oX, oY, cX, cY, "#facc15", 1.5, true);
+
+    pt(aX, aY, "A", "#ffffff", -5, -8);
+    pt(bX, bY, "B", "#ffffff", -14, 14);
+    pt(cX, cY, "C", "#ffffff", 8, 14);
+    pt(oX, oY, "O (외심)", "#facc15", 8, -6);
+
+    drawPill("삼각형의 외심: 세 꼭짓점에 이르는 거리 동일 (OA = OB = OC = R)", 45, 35, themeColor);
+    drawPill("외심 O 드래그 가능", 45, 60, "#facc15");
+  }
+  // 2) 내심 / 내접원
+  else if (qTxt.includes("내심") || qTxt.includes("내접원")) {
+    const aX = cx, aY = cy - 110;
+    const bX = cx - 130, bY = cy + 80;
+    const cX = cx + 130, cY = cy + 80;
+
+    line(aX, aY, bX, bY);
+    line(bX, bY, cX, cY);
+    line(cX, cY, aX, aY);
+
+    // 내심 I 및 내접원
+    const iX = cx, iY = cy + 25;
+    const r = 55;
+
+    ctx.save();
+    ctx.strokeStyle = "#4ade80";
+    ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    ctx.arc(iX, iY, r, 0, Math.PI * 2);
+    ctx.stroke();
+    ctx.restore();
+
+    // 접점 D, E, F 및 반지름 수선
+    const dX = cx, dY = cy + 80; // 밑변 접점 D
+    const fX = cx - 45, fY = cy - 5;
+    const eX = cx + 45, eY = cy - 5;
+
+    line(iX, iY, dX, dY, "#4ade80", 1.5, true);
+    line(iX, iY, fX, fY, "#4ade80", 1.5, true);
+    line(iX, iY, eX, eY, "#4ade80", 1.5, true);
+
+    rightAngle(dX, dY, 1, -1);
+
+    pt(aX, aY, "A", "#ffffff", -5, -8);
+    pt(bX, bY, "B", "#ffffff", -14, 14);
+    pt(cX, cY, "C", "#ffffff", 8, 14);
+    pt(iX, iY, "I (내심)", "#4ade80", 8, -6);
+    pt(dX, dY, "D", "#facc15", -5, 16);
+
+    drawPill("삼각형의 내심: 세 변에 이르는 거리 동일 (반지름 r)", 45, 35, themeColor);
+    drawPill("넓이 S = 1/2 · r · (a + b + c)", 45, 60, "#4ade80");
+  }
+  // 3) 평행사변형 / 마름모 / 사각형
+  else if (qTxt.includes("평행사변형") || qTxt.includes("마름모") || qTxt.includes("사각형") || qTxt.includes("사다리꼴")) {
+    const aX = cx - 60, aY = cy - 80;
+    const dX = cx + 130, dY = cy - 80;
+    const bX = cx - 130, bY = cy + 70;
+    const cX = cx + 60, cY = cy + 70;
+
+    line(aX, aY, dX, dY);
+    line(dX, dY, cX, cY);
+    line(cX, cY, bX, bY);
+    line(bX, bY, aX, aY);
+
+    // 대각선 AC, BD
+    line(aX, aY, cX, cY, "#facc15", 1.8, true);
+    line(bX, bY, dX, dY, "#facc15", 1.8, true);
+
+    const oX = (aX + cX) / 2, oY = (aY + cY) / 2;
+
+    pt(aX, aY, "A", "#ffffff", -14, -8);
+    pt(bX, bY, "B", "#ffffff", -16, 14);
+    pt(cX, cY, "C", "#ffffff", 10, 14);
+    pt(dX, dY, "D", "#ffffff", 10, -8);
+    pt(oX, oY, "O (교점)", "#facc15", 8, -6);
+
+    drawPill("평행사변형 성질: 두 대각선은 서로 다른 것을 이등분 (AO=CO, BO=DO)", 45, 35, themeColor);
+    drawPill("대변의 길이가 같고 대각의 크기가 같음", 45, 60, "#facc15");
+  }
+  // 4) 직각삼각형 / 피타고라스
+  else if (qTxt.includes("직각") || qTxt.includes("피타고라스") || qTxt.includes("빗변")) {
+    const cX = cx - 90, cY = cy + 70;
+    const aX = cx - 90, aY = cy - 90;
+    const bX = cx + 110, bY = cy + 70;
+
+    line(aX, aY, bX, bY);
+    line(bX, bY, cX, cY);
+    line(cX, cY, aX, aY);
+
+    rightAngle(cX, cY, 1, -1, 14);
+
+    // 빗변 수선의 발 H
+    const dx = bX - aX, dy = bY - aY;
+    const u = ((cX - aX) * dx + (cY - aY) * dy) / (dx * dx + dy * dy);
+    const hX = aX + u * dx, hY = aY + u * dy;
+
+    line(cX, cY, hX, hY, "#facc15", 1.8, true);
+
+    pt(aX, aY, "A", "#ffffff", -14, -8);
+    pt(bX, bY, "B", "#ffffff", 8, 14);
+    pt(cX, cY, "C (직각)", "#ffffff", -20, 18);
+    pt(hX, hY, "H", "#facc15", 6, -8);
+
+    drawPill("직각삼각형과 피타고라스 정리: a² + b² = c²", 45, 35, themeColor);
+    drawPill("소공식: AC × BC = AB × CH", 45, 60, "#facc15");
+  }
+  // 5) 무게중심 / 중선 / 닮음
+  else if (qTxt.includes("무게중심") || qTxt.includes("중선") || qTxt.includes("닮음")) {
+    const aX = cx, aY = cy - 110;
+    const bX = cx - 130, bY = cy + 80;
+    const cX = cx + 120, cY = cy + 80;
+
+    line(aX, aY, bX, bY);
+    line(bX, bY, cX, cY);
+    line(cX, cY, aX, aY);
+
+    const mX = (bX + cX) / 2, mY = (bY + cY) / 2;
+    const nX = (aX + cX) / 2, nY = (aY + cY) / 2;
+
+    line(aX, aY, mX, mY, "#facc15", 1.8, true);
+    line(bX, bY, nX, nY, "#facc15", 1.8, true);
+
+    const gX = (aX + bX + cX) / 3, gY = (aY + bY + cY) / 3;
+
+    pt(aX, aY, "A", "#ffffff", -5, -8);
+    pt(bX, bY, "B", "#ffffff", -14, 14);
+    pt(cX, cY, "C", "#ffffff", 8, 14);
+    pt(mX, mY, "M (중점)", "#94a3b8", -6, 16);
+    pt(gX, gY, "G (무게중심)", "#facc15", 10, -6);
+
+    drawPill("삼각형의 무게중심 G: 세 중선의 교점", 45, 35, themeColor);
+    drawPill("중선을 꼭짓점으로부터 2 : 1 로 내분 (AG : GM = 2 : 1)", 45, 60, "#facc15");
+  }
+  // 6) 기본: 이등변삼각형 꼭지각 이등분선
+  else {
+    const aX = cx, aY = cy - 110;
+    const bX = cx - 120, bY = cy + 80;
+    const cX = cx + 120, cY = cy + 80;
+
+    line(aX, aY, bX, bY);
+    line(bX, bY, cX, cY);
+    line(cX, cY, aX, aY);
+
+    const dX = (bX + cX) / 2, dY = (bY + cY) / 2;
+    line(aX, aY, dX, dY, "#facc15", 1.8, true);
+    rightAngle(dX, dY, 1, -1);
+
+    pt(aX, aY, "A", "#ffffff", -5, -8);
+    pt(bX, bY, "B", "#ffffff", -14, 14);
+    pt(cX, cY, "C", "#ffffff", 8, 14);
+    pt(dX, dY, "D", "#facc15", -5, 16);
+
+    drawHandle(aX, aY, 7, "꼭짓점 A (각 이등분선)");
+    drawPill("이등변삼각형 성질: AB = AC, 꼭지각 이등분선 AD ⊥ BC", 45, 35, themeColor);
+    drawPill("밑변을 수직이등분 (BD = CD), 밑각 동일 (∠B = ∠C)", 45, 60, "#facc15");
+  }
+}
+
+// --- 함수 및 수식 그래프 렌더러 (고쟁이/RPM 공통수학2 전용) ---
+function drawGongsu2Problem(p, qTxt) {
+  drawAxes();
+  const isMode1 = (curModeIdx === 1);
+  const isMode2 = (curModeIdx === 2);
+  const themeColor = isMode1 ? "#f43f5e" : (isMode2 ? "#22d3ee" : "#38bdf8");
+
+  // 1) 유리함수 / 점근선 / 분수함수
+  if (qTxt.includes("유리") || qTxt.includes("점근선") || qTxt.includes("frac") || qTxt.includes("/")) {
+    let pX = isMode1 ? 1 : (isMode2 ? -1 : -1);
+    let qY = isMode1 ? -1 : (isMode2 ? -2 : -2);
+    let k = K.k !== undefined ? K.k : (isMode1 ? -1.5 : (isMode2 ? -4.0 : -2.0));
+
+    // 점근선 점선 그리기
+    ctx.save();
+    ctx.setLineDash([4, 4]);
+    ctx.strokeStyle = "rgba(148, 163, 184, 0.7)";
+    ctx.lineWidth = 1.5;
+    // x = p
+    ctx.beginPath(); ctx.moveTo(X(pX), 20); ctx.lineTo(X(pX), chh - 30); ctx.stroke();
+    // y = q
+    ctx.beginPath(); ctx.moveTo(40, Y(qY)); ctx.lineTo(cw - 20, Y(qY)); ctx.stroke();
+    ctx.restore();
+
+    ctx.fillStyle = "#94a3b8";
+    ctx.font = "11px sans-serif";
+    ctx.fillText(`x = ${pX}`, X(pX) + 6, chh - 36);
+    ctx.fillText(`y = ${qY}`, 46, Y(qY) - 6);
+
+    // 쌍곡선 그리기
+    ctx.save();
+    ctx.strokeStyle = themeColor;
+    ctx.lineWidth = 2.5;
+
+    // 좌측 가지
+    ctx.beginPath();
+    for (let px = 40; px < X(pX) - 3; px += 2) {
+      const x = iX(px);
+      const y = (1.5 / (x - pX)) + qY;
+      px === 40 ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
+    }
+    ctx.stroke();
+
+    // 우측 가지
+    ctx.beginPath();
+    for (let px = X(pX) + 3; px <= cw - 20; px += 2) {
+      const x = iX(px);
+      const y = (1.5 / (x - pX)) + qY;
+      px === X(pX) + 3 ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    // 동적 인터랙티브 직선: 점 (pX+2, qY-2)를 지나는 직선
+    const pFixedX = pX + 2, pFixedY = qY - 2;
+    ctx.save();
+    ctx.strokeStyle = "#fb7185";
+    ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    ctx.moveTo(40, Y(k * (iX(40) - pFixedX) + pFixedY));
+    ctx.lineTo(cw - 20, Y(k * (iX(cw - 20) - pFixedX) + pFixedY));
+    ctx.stroke();
+    ctx.restore();
+
+    // 정점 표시
+    ctx.fillStyle = "#facc15";
+    ctx.beginPath();
+    ctx.arc(X(pFixedX), Y(pFixedY), 5.5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillText(`P(${pFixedX}, ${pFixedY})`, X(pFixedX) + 8, Y(pFixedY) + 4);
+
+    const hx = pFixedX + 1.5;
+    const hy = k * (hx - pFixedX) + pFixedY;
+    drawHandle(hx, hy, 7, `기울기 k = ${k.toFixed(1)}`);
+
+    drawPill(`유리함수 쌍곡선: 점근선 (${pX}, ${qY}) 대칭`, X(-4.5), Y(3.5), themeColor);
+    drawPill(`직선 y = ${k.toFixed(1)}(x - ${pFixedX}) + ${pFixedY} (핸들 드래그 가능)`, X(-4.5), Y(2.8), "#fb7185");
+  }
+  // 2) 무리함수 / 루트
+  else if (qTxt.includes("무리") || qTxt.includes("sqrt") || qTxt.includes("루트")) {
+    const sX = isMode1 ? -2 : 1;
+    const sY = isMode1 ? 1 : -1;
+    let k = K.k !== undefined ? K.k : 1.2;
+
+    // 무리함수 곡선: y = 2*sqrt(x - sX) + sY
+    ctx.save();
+    ctx.strokeStyle = themeColor;
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    for (let px = X(sX); px <= cw - 20; px += 2) {
+      const x = iX(px);
+      if (x < sX) continue;
+      const y = 2 * Math.sqrt(x - sX) + sY;
+      px === X(sX) ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    // 시작점 핸들
+    ctx.fillStyle = "#facc15";
+    ctx.beginPath();
+    ctx.arc(X(sX), Y(sY), 6, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillText(`시작점 (${sX}, ${sY})`, X(sX) - 20, Y(sY) + 16);
+
+    // 직선과의 위치관계
+    ctx.save();
+    ctx.strokeStyle = "#fb7185";
+    ctx.lineWidth = 2.0;
+    ctx.beginPath();
+    ctx.moveTo(40, Y(k * iX(40)));
+    ctx.lineTo(cw - 20, Y(k * iX(cw - 20)));
+    ctx.stroke();
+    ctx.restore();
+
+    drawHandle(2.5, k * 2.5, 7, `기울기 k = ${k.toFixed(1)}`);
+    drawPill(`무리함수 곡선: y = 2√(x - ${sX}) + ${sY}`, X(-4.5), Y(3.5), themeColor);
+    drawPill("접할 때(D=0) 및 시작점을 지날 때의 경계 조건 분석", X(-4.5), Y(2.8), "#fb7185");
+  }
+  // 3) 역함수 / 대칭이동
+  else if (qTxt.includes("역함수") || qTxt.includes("f^{-1}") || qTxt.includes("f^-1") || qTxt.includes("대칭")) {
+    // y = x 대칭선
+    ctx.save();
+    ctx.setLineDash([4, 4]);
+    ctx.strokeStyle = "#e2e8f0";
+    ctx.lineWidth = 1.8;
+    ctx.beginPath();
+    ctx.moveTo(40, Y(iX(40)));
+    ctx.lineTo(cw - 20, Y(iX(cw - 20)));
+    ctx.stroke();
+    ctx.restore();
+    ctx.fillStyle = "#e2e8f0";
+    ctx.fillText("y = x", cw - 35, Y(iX(cw - 35)) - 8);
+
+    // 원함수 y = f(x)
+    ctx.save();
+    ctx.strokeStyle = "#38bdf8";
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    for (let px = 40; px <= cw - 20; px += 2) {
+      const x = iX(px);
+      const y = 0.25 * x * x + 1;
+      px === 40 ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    // 역함수 y = f^{-1}(x) (y=x 대칭)
+    ctx.save();
+    ctx.strokeStyle = "#f43f5e";
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    for (let px = X(1); px <= cw - 20; px += 2) {
+      const x = iX(px);
+      if (x < 1) continue;
+      const y = 2 * Math.sqrt(x - 1);
+      px === X(1) ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    // 대칭점 (0, 1) <-> (1, 0)
+    ctx.fillStyle = "#facc15";
+    ctx.beginPath(); ctx.arc(X(0), Y(1), 5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillText("(0, 1)", X(0) - 26, Y(1) + 4);
+
+    ctx.beginPath(); ctx.arc(X(1), Y(0), 5, 0, Math.PI * 2); ctx.fill();
+    ctx.fillText("(1, 0)", X(1) + 6, Y(0) + 14);
+
+    drawPill("원함수 y = f(x)", X(-4.5), Y(3.5), "#38bdf8");
+    drawPill("역함수 y = f⁻¹(x) : y = x 대칭", X(-4.5), Y(2.8), "#f43f5e");
+  }
+  // 4) 집합과 명제 / 벤다이어그램
+  else if (qTxt.includes("집합") || qTxt.includes("cap") || qTxt.includes("cup") || qTxt.includes("subset") || qTxt.includes("원소")) {
+    const cenX = cw / 2, cenY = chh / 2;
+    // 전체집합 U 사각형
+    ctx.save();
+    ctx.strokeStyle = "#64748b";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(cenX - 160, cenY - 110, 320, 220);
+    ctx.fillStyle = "#94a3b8";
+    ctx.font = "bold 14px sans-serif";
+    ctx.fillText("전체집합 U", cenX - 150, cenY - 90);
+    ctx.restore();
+
+    // 집합 A 원
+    ctx.save();
+    ctx.fillStyle = "rgba(56, 189, 248, 0.25)";
+    ctx.strokeStyle = "#38bdf8";
+    ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    ctx.arc(cenX - 45, cenY, 75, 0, Math.PI * 2);
+    ctx.fill(); ctx.stroke();
+    ctx.fillStyle = "#38bdf8";
+    ctx.fillText("A", cenX - 95, cenY - 45);
+    ctx.restore();
+
+    // 집합 B 원
+    ctx.save();
+    ctx.fillStyle = "rgba(244, 63, 94, 0.25)";
+    ctx.strokeStyle = "#f43f5e";
+    ctx.lineWidth = 2.2;
+    ctx.beginPath();
+    ctx.arc(cenX + 45, cenY, 75, 0, Math.PI * 2);
+    ctx.fill(); ctx.stroke();
+    ctx.fillStyle = "#f43f5e";
+    ctx.fillText("B", cenX + 85, cenY - 45);
+    ctx.restore();
+
+    // 교집합 영역 라벨
+    ctx.fillStyle = "#facc15";
+    ctx.font = "bold 13px sans-serif";
+    ctx.fillText("A ∩ B", cenX - 18, cenY + 4);
+
+    drawPill("벤다이어그램 시각화: n(A ∪ B) = n(A) + n(B) − n(A ∩ B)", 45, 35, themeColor);
+    drawPill("드모르간 법칙: (A ∪ B)ᶜ = Aᶜ ∩ Bᶜ", 45, 60, "#facc15");
+  }
+  // 5) 순열과 조합 / 경우의 수 (격자 최단경로)
+  else if (qTxt.includes("순열") || qTxt.includes("조합") || qTxt.includes("경우의 수") || qTxt.includes("P_") || qTxt.includes("C_")) {
+    const sx = 80, sy = chh - 80;
+    const gx = 4, gy = 3;
+    const dx = 55, dy = 45;
+
+    ctx.save();
+    ctx.strokeStyle = "rgba(148, 163, 184, 0.5)";
+    ctx.lineWidth = 2;
+    for (let i = 0; i <= gx; i++) {
+      ctx.beginPath(); ctx.moveTo(sx + i * dx, sy); ctx.lineTo(sx + i * dx, sy - gy * dy); ctx.stroke();
+    }
+    for (let j = 0; j <= gy; j++) {
+      ctx.beginPath(); ctx.moveTo(sx, sy - j * dy); ctx.lineTo(sx + gx * dx, sy - j * dy); ctx.stroke();
+    }
+
+    // 최단 경로 예시
+    ctx.strokeStyle = themeColor;
+    ctx.lineWidth = 3.5;
+    ctx.beginPath();
+    ctx.moveTo(sx, sy);
+    ctx.lineTo(sx + 2 * dx, sy);
+    ctx.lineTo(sx + 2 * dx, sy - 2 * dy);
+    ctx.lineTo(sx + 4 * dx, sy - 2 * dy);
+    ctx.lineTo(sx + 4 * dx, sy - 3 * dy);
+    ctx.stroke();
+    ctx.restore();
+
+    // 시작점 및 도착점
+    ctx.fillStyle = "#4ade80";
+    ctx.beginPath(); ctx.arc(sx, sy, 6, 0, Math.PI * 2); ctx.fill();
+    ctx.fillText("시작 A(0,0)", sx - 15, sy + 22);
+
+    ctx.fillStyle = "#f43f5e";
+    ctx.beginPath(); ctx.arc(sx + gx * dx, sy - gy * dy, 6, 0, Math.PI * 2); ctx.fill();
+    ctx.fillText("도착 B(4,3)", sx + gx * dx - 15, sy - gy * dy - 12);
+
+    drawPill("경우의 수와 최단 경로: 같은 것이 있는 순열 (4+3)! / (4! · 3!)", 45, 35, themeColor);
+    drawPill("조합 표현: ₇C₄ = 35가지 경로", 45, 60, "#facc15");
+  }
+  // 6) 기본 다항함수 / 포물선
+  else {
+    ctx.save();
+    ctx.strokeStyle = themeColor;
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    for (let px = 40; px <= cw - 20; px += 2) {
+      const x = iX(px);
+      const y = 0.25 * (x + 2) * (x - 2);
+      px === 40 ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
+    }
+    ctx.stroke();
+    drawHandle(0, -1, 7, "꼭짓점 (0, −1)");
+    drawPill(`${curBook().shortTitle} ${currentPage}쪽`, X(1.5), Y(2.5), themeColor);
+    ctx.restore();
+  }
+}
+
 function draw() {
   if (!ctx) return;
   ctx.clearRect(0, 0, cw, chh);
-  drawAxes();
-  
-  if (curBookKey === "gongsu2" && currentQid === "0666") {
-    // 0666 인터랙티브 (모드별 100% 그래프 연동)
-    if (curModeIdx === 0) {
-      // [원래 문제]: 곡선 y = (-2x-1)/(x+1), 정점 (1, -6)
-      ctx.save(); ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 2.5;
-      ctx.beginPath();
-      for (let px = 40; px < X(-1) - 2; px += 2) {
-        const x = iX(px); const y = (-2 * x - 1) / (x + 1);
-        px === 40 ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
-      }
-      ctx.stroke();
-      ctx.beginPath();
-      for (let px = X(-1) + 2; px <= cw - 20; px += 2) {
-        const x = iX(px); const y = (-2 * x - 1) / (x + 1);
-        px === X(-1) + 2 ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
-      }
-      ctx.stroke(); ctx.restore();
 
-      const k = K.k !== undefined ? K.k : -2.0;
-      ctx.save(); ctx.strokeStyle = "#fb7185"; ctx.lineWidth = 2.5;
-      ctx.beginPath();
-      ctx.moveTo(40, Y(k * (iX(40) - 1) - 6));
-      ctx.lineTo(cw - 20, Y(k * (iX(cw - 20) - 1) - 6));
-      ctx.stroke(); ctx.restore();
+  const prob = curProb();
+  const qTxt = (prob ? (prob.qText || "") + " " + (prob.unit || "") : "");
+  const shortTitle = curBook().shortTitle;
 
-      ctx.fillStyle = "#f97316";
-      ctx.beginPath(); ctx.arc(X(1), Y(-6), 6, 0, Math.PI * 2); ctx.fill();
-      ctx.fillText("(1, −6)", X(1) + 8, Y(-6) + 4);
+  // 1. 중2-2 일품 기하 도형 렌더러
+  if (curBookKey === "ilpum_mid2_2") {
+    drawGeometryProblem(prob, qTxt);
+    requestAnimationFrame(draw);
+    return;
+  }
 
-      const hx = 2.5; const hy = k * (hx - 1) - 6;
-      drawHandle(hx, hy, 7, `k = ${k.toFixed(1)}`);
-      drawPill("곡선 y = (-2x-1)/(x+1)", X(-4.5), Y(-1.5), "#38bdf8");
-      drawPill(`직선 y = ${k.toFixed(1)}(x-1)-6`, X(hx), Y(hy) + 22, "#fb7185");
-    } else if (curModeIdx === 1) {
-      // [계수 변형]: 곡선 y = (-x+2)/(x-1), 정점 (2, -4)
-      ctx.save(); ctx.strokeStyle = "#a78bfa"; ctx.lineWidth = 2.5;
-      ctx.beginPath();
-      for (let px = 40; px < X(1) - 2; px += 2) {
-        const x = iX(px); const y = (-x + 2) / (x - 1);
-        px === 40 ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
-      }
-      ctx.stroke();
-      ctx.beginPath();
-      for (let px = X(1) + 2; px <= cw - 20; px += 2) {
-        const x = iX(px); const y = (-x + 2) / (x - 1);
-        px === X(1) + 2 ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
-      }
-      ctx.stroke(); ctx.restore();
+  // 2. 고쟁이 / RPM 공통수학2 그래프 렌더러
+  if (curBookKey === "gongsu2" || curBookKey === "rpm_gongsu2") {
+    drawGongsu2Problem(prob, qTxt);
+    requestAnimationFrame(draw);
+    return;
+  }
 
-      const k = K.k !== undefined ? K.k : -1.5;
-      ctx.save(); ctx.strokeStyle = "#f43f5e"; ctx.lineWidth = 2.5;
-      ctx.beginPath();
-      ctx.moveTo(40, Y(k * (iX(40) - 2) - 4));
-      ctx.lineTo(cw - 20, Y(k * (iX(cw - 20) - 2) - 4));
-      ctx.stroke(); ctx.restore();
-
-      ctx.fillStyle = "#facc15";
-      ctx.beginPath(); ctx.arc(X(2), Y(-4), 6, 0, Math.PI * 2); ctx.fill();
-      ctx.fillText("(2, −4)", X(2) + 8, Y(-4) + 4);
-
-      const hx = 3.5; const hy = k * (hx - 2) - 4;
-      drawHandle(hx, hy, 7, `k = ${k.toFixed(1)}`);
-      drawPill("변형 곡선 y = (-x+2)/(x-1)", X(-4), Y(1.5), "#a78bfa");
-      drawPill(`변형 직선 y = ${k.toFixed(1)}(x-2)-4`, X(hx), Y(hy) + 22, "#f43f5e");
-    } else {
-      // [심화 응용]: 두 점에서 만나는 영역 및 두 접선 k = -4, k = -1 시각화
-      ctx.save(); ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 2.5;
-      ctx.beginPath();
-      for (let px = 40; px < X(-1) - 2; px += 2) {
-        const x = iX(px); const y = (-2 * x - 1) / (x + 1);
-        px === 40 ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
-      }
-      ctx.stroke();
-      ctx.beginPath();
-      for (let px = X(-1) + 2; px <= cw - 20; px += 2) {
-        const x = iX(px); const y = (-2 * x - 1) / (x + 1);
-        px === X(-1) + 2 ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
-      }
-      ctx.stroke(); ctx.restore();
-
-      // 두 접선 점선 표시
-      [-4.0, -1.0].forEach((tk, idx) => {
-        ctx.save();
-        ctx.setLineDash([4, 4]);
-        ctx.strokeStyle = idx === 0 ? "#f43f5e" : "#eab308";
-        ctx.lineWidth = 1.8;
-        ctx.beginPath();
-        ctx.moveTo(40, Y(tk * (iX(40) - 1) - 6));
-        ctx.lineTo(cw - 20, Y(tk * (iX(cw - 20) - 1) - 6));
-        ctx.stroke();
-        ctx.restore();
-        drawPill(`접선 k = ${tk.toFixed(1)}`, X(idx === 0 ? -3 : 2), Y(tk * (idx === 0 ? -4 : 1) - 6), idx === 0 ? "#f43f5e" : "#eab308");
-      });
-
-      const k = K.k !== undefined ? K.k : -5.0;
-      ctx.save(); ctx.strokeStyle = "#22d3ee"; ctx.lineWidth = 2.5;
-      ctx.beginPath();
-      ctx.moveTo(40, Y(k * (iX(40) - 1) - 6));
-      ctx.lineTo(cw - 20, Y(k * (iX(cw - 20) - 1) - 6));
-      ctx.stroke(); ctx.restore();
-
-      ctx.fillStyle = "#f97316";
-      ctx.beginPath(); ctx.arc(X(1), Y(-6), 6, 0, Math.PI * 2); ctx.fill();
-      ctx.fillText("(1, −6)", X(1) + 8, Y(-6) + 4);
-
-      const hx = 2.5; const hy = k * (hx - 1) - 6;
-      drawHandle(hx, hy, 7, `k = ${k.toFixed(1)}`);
-      drawPill("1등급 킬러 심화: n(A ∩ B) = 2 (교점 2개 영역)", X(-4), Y(3), "#22d3ee");
-    }
-  } else if (curBookKey === "ilpum_mid2_2") {
-    // 중2-2 일품 기하 도형 인터랙티브 시각화
-    ctx.save();
-    const isMode1 = (curModeIdx === 1);
-    const isMode2 = (curModeIdx === 2);
-    
-    // 삼각형 꼭짓점 좌표 (이등변/직각삼각형)
-    const ax = 0, ay = 3;
-    const bx = isMode1 ? -3 : -2.5, by = -3;
-    const cx = 3, cy = -3;
-    
-    // 삼각형 외곽선
-    ctx.strokeStyle = isMode1 ? "#f43f5e" : (isMode2 ? "#22d3ee" : "#38bdf8");
-    ctx.lineWidth = 2.5;
-    ctx.beginPath();
-    ctx.moveTo(X(ax), Y(ay));
-    ctx.lineTo(X(bx), Y(by));
-    ctx.lineTo(X(cx), Y(cy));
-    ctx.closePath();
-    ctx.stroke();
-
-    // 점 D (수선의 발 또는 중점)
-    const dx = (bx + cx) / 2, dy = by;
-    ctx.setLineDash([4, 4]);
-    ctx.strokeStyle = "#facc15";
-    ctx.lineWidth = 1.8;
-    ctx.beginPath();
-    ctx.moveTo(X(ax), Y(ay));
-    ctx.lineTo(X(dx), Y(dy));
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    // 꼭짓점 및 점 D 라벨
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "bold 13px sans-serif";
-    ctx.fillText("A", X(ax) - 4, Y(ay) - 8);
-    ctx.fillText("B", X(bx) - 14, Y(by) + 14);
-    ctx.fillText("C", X(cx) + 8, Y(cy) + 14);
-    ctx.fillStyle = "#facc15";
-    ctx.fillText("D", X(dx) - 4, Y(dy) + 16);
-
-    // 인터랙티브 꼭짓점 핸들 (A점 드래그 가능)
-    drawHandle(ax, ay, 7, "꼭짓점 A (각 이등분선)");
-
-    if (isMode1) {
-      drawPill("계수 변형: 직각삼각형 피타고라스 a²+b²=c²", X(-4), Y(3.5), "#f43f5e");
-    } else if (isMode2) {
-      drawPill("1등급 킬러 심화: 삼각형 외심·내심 복합 조건", X(-4), Y(3.5), "#22d3ee");
-      // 내접원 시각화
-      ctx.strokeStyle = "#4ade80";
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.arc(X(dx), Y(dy + 1.6), 35, 0, Math.PI * 2);
-      ctx.stroke();
-      drawPill("내접원 I", X(dx + 0.5), Y(dy + 1.6), "#4ade80");
-    } else {
-      drawPill("원래 문제: 이등변삼각형 꼭지각 이등분선 (AD ⊥ BC)", X(-4), Y(3.5), "#38bdf8");
-    }
-    ctx.restore();
-  } else if (curBookKey === "rpm_geom") {
-    // 기하 이차곡선 시각화
+  // 3. 기하 이차곡선
+  if (curBookKey === "rpm_geom") {
+    drawAxes();
     ctx.save(); ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 2.5;
     ctx.beginPath();
-    // 포물선 y^2 = 4px
     for (let y = -4; y <= 4; y += 0.1) {
       const x = (y * y) / 4;
       const px = X(x), py = Y(y);
@@ -1888,8 +2293,13 @@ function draw() {
     drawHandle(1, 0, 7, "초점 F(1, 0)");
     drawPill("포물선 y² = 4x", X(2), Y(2.5), "#38bdf8");
     ctx.restore();
-  } else if (curBookKey === "daesu") {
-    // 대수 지수/로그함수 시각화
+    requestAnimationFrame(draw);
+    return;
+  }
+
+  // 4. 대수 지수/로그함수
+  if (curBookKey === "daesu" || curBookKey === "rpm_daesu") {
+    drawAxes();
     ctx.save(); ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 2.5;
     ctx.beginPath();
     for (let px = 40; px <= cw - 20; px += 2) {
@@ -1901,21 +2311,23 @@ function draw() {
     drawHandle(1, 2, 7, "P(1, 2)");
     drawPill("지수함수 y = 2^x", X(1.5), Y(3), "#38bdf8");
     ctx.restore();
-  } else {
-    // 일반 다항/방정식 곡선
-    ctx.save(); ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 2.5;
-    ctx.beginPath();
-    for (let px = 40; px <= cw - 20; px += 2) {
-      const x = iX(px);
-      const y = 0.2 * (x + 2) * (x - 2);
-      px === 40 ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
-    }
-    ctx.stroke();
-    drawHandle(0, -0.8, 7, "극점 (0, -0.8)");
-    drawPill(`${curBook().shortTitle} ${currentPage}쪽`, X(1.5), Y(2), "#38bdf8");
-    ctx.restore();
+    requestAnimationFrame(draw);
+    return;
   }
-  
+
+  // 5. 기본 다항함수
+  drawAxes();
+  ctx.save(); ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  for (let px = 40; px <= cw - 20; px += 2) {
+    const x = iX(px);
+    const y = 0.2 * (x + 2) * (x - 2);
+    px === 40 ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
+  }
+  ctx.stroke();
+  drawHandle(0, -0.8, 7, "극점 (0, -0.8)");
+  drawPill(`${shortTitle} ${currentPage}쪽`, X(1.5), Y(2), "#38bdf8");
+  ctx.restore();
   requestAnimationFrame(draw);
 }
 
@@ -1954,10 +2366,10 @@ function onMove(e) {
   const p = { x: cx - rect.left, y: cy - rect.top };
   const mx = iX(p.x), my = iY(p.y);
 
-  if (curBookKey === "gongsu2" && currentQid === "0666") {
-    const dx = mx - 1, dy = my - (-6);
+  if (curBookKey === "gongsu2" || curBookKey === "rpm_gongsu2") {
+    const dx = mx - 1, dy = my - (-4);
     if (Math.abs(dx) > 0.1) {
-      K.k = clamp(dy / dx, -8, 5);
+      K.k = clamp(dy / dx, -8, 8);
     }
   }
 }
