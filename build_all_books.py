@@ -1241,8 +1241,7 @@ function cleanMathText(s) {
   str = str.replace(/k-5/g, 'k \\le -5');
   str = str.replace(/k-4/g, 'k \\le -4');
   str = str.replace(/-2k0/g, '-2 < k \\le 0');
-  str = str.replace(/-1k0/g, '-1 < k \\le 0');
-  str = str.replace(/\\W/g, '\\');
+  str = str.replace(/\\W/g, "");
   return str;
 }
 
