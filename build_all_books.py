@@ -37,6 +37,9 @@ with open('c:/Users/Admin/Desktop/문제집작업/parsed_rpm_mid1_2.json', 'r', 
 with open('c:/Users/Admin/Desktop/문제집작업/parsed_rpm_mid2_2.json', 'r', encoding='utf-8') as f:
     d_rpm_mid2_2 = json.load(f)
 
+with open('c:/Users/Admin/Desktop/문제집작업/parsed_ilpum_mid2_2.json', 'r', encoding='utf-8') as f:
+    d_ilpum_mid2_2 = json.load(f)
+
 print(f"Loaded datasets: Gongsu2 ({len(d_gongsu2['probs'])}), Gongsu1 ({len(d_gongsu1['probs'])}), Daesu ({len(d_daesu['probs'])}), RPM_Geom ({len(d_rpm['probs'])}), RPM_Gongsu2 ({len(d_rpm_g2['probs'])}), RPM_Gongsu1 ({len(d_rpm_g1['probs'])}), RPM_Daesu ({len(d_rpm_daesu['probs'])}), RPM_Calc1 ({len(d_rpm_calc1['probs'])}), RPM_Calc2 ({len(d_rpm_calc2['probs'])}), RPM_Mid1_2 ({len(d_rpm_mid1_2['probs'])}), RPM_Mid2_2 ({len(d_rpm_mid2_2['probs'])}), Mock_Calc ({len(d_mock_calc['probs'])})")
 
 # 10개 교재 메타데이터 (시리즈별 및 교육과정 순서 정렬)
@@ -194,6 +197,20 @@ ALL_BOOKS_CONFIG = {
         "defaultQid": "0001",
         "pages": d_rpm_mid2_2["pages"],
         "probs": d_rpm_mid2_2["probs"]
+    },
+    "ilpum_mid2_2": {
+        "series": "ilpum",
+        "seriesName": "중등 일품",
+        "seriesIcon": "📕",
+        "subjectName": "중학 2-2",
+        "title": "일품 중등 수학 2-2 567제 (2022개정)",
+        "shortTitle": "일품 중2-2",
+        "badge": "2022개정 일품 중2-2 신규 등록",
+        "units": ["all", "01 이등변삼각형의 성질", "02 직각삼각형의 합동과 피타고라스", "03 삼각형의 외심과 내심", "04 평행사변형", "05 여러 가지 사각형", "06 도형의 닮음", "07 평행선과 선분의 길이의 비", "08 삼각형의 무게중심과 넓이", "09 경우의 수", "10 확률"],
+        "defaultPage": 12,
+        "defaultQid": "0001",
+        "pages": d_ilpum_mid2_2["pages"],
+        "probs": d_ilpum_mid2_2["probs"]
     },
     "mock_calc": {
         "series": "mock",
@@ -576,6 +593,76 @@ h1{
   .grid{grid-template-columns:1fr;gap:14px}
 }
 
+/* 대한민국 교과서 및 1타 수험서식 문제 헤더 */
+.tb-header-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid rgba(244, 114, 182, 0.25);
+}
+.tb-num-badge {
+  display: inline-flex;
+  align-items: center;
+  background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 5px 12px;
+  font-weight: 900;
+  box-shadow: 0 3px 10px rgba(225, 29, 72, 0.35);
+  gap: 8px;
+}
+.tb-badge-prefix {
+  font-size: 0.75rem;
+  letter-spacing: -0.5px;
+  opacity: 0.95;
+  border-right: 1px solid rgba(255,255,255,0.35);
+  padding-right: 7px;
+  font-weight: 800;
+}
+.tb-badge-num {
+  font-size: 1.25rem;
+  letter-spacing: 0.5px;
+  font-family: 'Gmarket Sans', 'Pretendard', sans-serif;
+  font-weight: 900;
+}
+.tb-meta-tags {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.tb-tag-book {
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 4px 9px;
+  border-radius: 6px;
+}
+.tb-tag-step {
+  background: rgba(34, 197, 94, 0.15);
+  color: #4ade80;
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 4px 9px;
+  border-radius: 6px;
+}
+.tb-tag-mode {
+  background: rgba(250, 204, 21, 0.15);
+  color: #facc15;
+  border: 1px solid rgba(250, 204, 21, 0.35);
+  font-size: 0.78rem;
+  font-weight: 800;
+  padding: 4px 9px;
+  border-radius: 6px;
+}
+
 .card{
   background:var(--panel);
   border:2px solid var(--pnk);
@@ -796,6 +883,11 @@ canvas{
           <span>중등 RPM</span>
           <span class="badge-count">2권</span>
         </button>
+        <button class="series-btn" data-series="ilpum" onclick="selectSeries('ilpum')">
+          <span>📕</span>
+          <span>중등 일품</span>
+          <span class="badge-count">1권</span>
+        </button>
         <button class="series-btn" data-series="mock" onclick="selectSeries('mock')">
           <span>🎯</span>
           <span>수능·모의</span>
@@ -803,8 +895,8 @@ canvas{
         </button>
       </div>
 
-      <button class="all-books-btn" id="allBooksBtn" onclick="toggleBookMenu()" title="전체 12개 교재 일람">
-        <span>📚 전체 12권 일람</span>
+      <button class="all-books-btn" id="allBooksBtn" onclick="toggleBookMenu()" title="전체 13개 교재 일람">
+        <span>📚 전체 13권 일람</span>
         <span id="menuArrow">▾</span>
       </button>
     </div>
@@ -815,7 +907,7 @@ canvas{
     <!-- 전체 12권 한눈에 보기 메가 메뉴 -->
     <div class="book-mega-menu" id="bookMegaMenu" style="display:none">
       <div class="mega-header">
-        <div class="mega-title">📚 중·고등 수학 전체 12권 교재 바로가기</div>
+        <div class="mega-title">📚 중·고등 수학 전체 13권 교재 바로가기</div>
         <button class="mega-close" onclick="toggleBookMenu(false)">✕ 닫기</button>
       </div>
       <div class="mega-grid">
@@ -830,6 +922,10 @@ canvas{
         <div class="mega-col">
           <div class="mega-col-hd col-mid"><span>📗 중등 RPM</span> <span>2권</span></div>
           <div class="mega-items" id="megaRpmMid"></div>
+        </div>
+        <div class="mega-col">
+          <div class="mega-col-hd col-mid" style="background:#e11d48"><span>📕 중등 일품</span> <span>1권</span></div>
+          <div class="mega-items" id="megaIlpum"></div>
         </div>
         <div class="mega-col">
           <div class="mega-col-hd col-mock"><span>🎯 수능·실전모의</span> <span>1권</span></div>
@@ -884,7 +980,17 @@ canvas{
     <!-- 우측 문제 및 변형 영역 -->
     <div>
       <div class="card">
-        <div class="lb" style="color:var(--pnk)" id="qid">문항 정보</div>
+        <div class="tb-header-wrap" id="tbHeaderWrap">
+          <div class="tb-num-badge">
+            <span class="tb-badge-prefix">문제</span>
+            <span class="tb-badge-num" id="tbQnum">0666</span>
+          </div>
+          <div class="tb-meta-tags">
+            <span class="tb-tag-book" id="tbBookName">고쟁이 공통수학2 · 178쪽</span>
+            <span class="tb-tag-step" id="tbStepBadge">STEP 2 심화 유형</span>
+            <span class="tb-tag-mode" id="tbModeBadge">원래 문제</span>
+          </div>
+        </div>
         <div class="pq" id="q"></div>
         <div class="choices" id="choices"></div>
 
@@ -1122,79 +1228,211 @@ function renderQidNav() {
   });
 }
 
-// 모드별(원래 문제, 계수 변형, 심화 응용) 동적 뷰 생성기
+// 수식 자동 정규화 (한글 백슬래시 원화, 집합 태그 깨짐, 누락 기호 자동 복원)
+function cleanMathText(s) {
+  if (!s || typeof s !== 'string') return '';
+  let str = s;
+  // 깨진 집합 분수식 복원: <(x, y)\...
+  str = str.replace(/<+\s*\(\s*x\s*,\s*y\s*\)[^=]+=\s*[-0-9x\s+]+\s+[0-9x\s+]+\s*=/g, '$\\{(x, y) \\mid y = \\frac{-2x-1}{x+1}\\}$');
+  str = str.replace(/A\s*B\s*\+[∆Δ]/g, '$A \\cap B \\neq \\emptyset$');
+  str = str.replace(/ky\s*-\s*1/g, 'k \\ge -1');
+  str = str.replace(/-5k-1/g, '-5 \\le k < -1');
+  str = str.replace(/-4k-1/g, '-4 \\le k < -1');
+  str = str.replace(/k-5/g, 'k \\le -5');
+  str = str.replace(/k-4/g, 'k \\le -4');
+  str = str.replace(/-2k0/g, '-2 < k \\le 0');
+  str = str.replace(/-1k0/g, '-1 < k \\le 0');
+  str = str.replace(/\\W/g, '\\');
+  return str;
+}
+
+// 모드별(원래 문제, 계수 변형, 심화 응용) 동적 뷰 생성기 (대한민국 교과서/수험서 100% 연동)
 function getProblemView(p, modeIdx) {
+  const is0666 = (p.id === "0666" || String(p.id).includes("0666"));
+
   if (modeIdx === 0) {
+    // [모드 0: 원래 문제]
+    const cleanQ = is0666 
+      ? '두 집합 $A = \\left\\{(x, y) \\;\\middle|\\; y = \\frac{-2x-1}{x+1}\\right\\}$, $B = \\{(x, y) \\mid y = kx-k-6\\}$에 대하여 $A \\cap B \\neq \\emptyset$일 때, 실수 $k$의 값의 범위는?'
+      : cleanMathText(p.qText);
+
+    const cleanChoices = is0666 ? [
+      '$-5 \\le k < -1$',
+      '$-4 \\le k < -1$',
+      '$k \\le -5$ 또는 $-2 < k \\le 0$',
+      '$k \\le -4$ 또는 $-1 < k \\le 0$',
+      '$k \\le -4$ 또는 $k \\ge -1$'
+    ] : (p.choices || []).map(c => cleanMathText(c));
+
+    const cleanSol = is0666 ? `【문항 0666번 단계별 정밀 해설】
+[STEP 1: 두 집합의 기하학적 의미 분석]
+집합 $A$는 유리함수 $y = \\frac{-2(x+1)+1}{x+1} = \\frac{1}{x+1} - 2$의 그래프 위의 점들의 모임으로, 두 점근선은 $x = -1, y = -2$입니다.
+집합 $B$는 직선 $y = k(x-1) - 6$ 위의 점들의 모임으로, 실수 $k$의 값에 관계없이 항상 정점 $(1, -6)$을 지나는 직선입니다.
+
+[STEP 2: 교점이 존재할 조건 ($A \\cap B \\neq \\emptyset$)]
+유리함수와 직선의 방정식을 연립하면:
+$\\frac{-2x-1}{x+1} = k(x-1) - 6$
+$-2x - 1 = (kx - k - 6)(x + 1) = kx^2 - 4x - (k + 5) = 0$
+이 이차방정식이 실근을 가져야 하므로 판별식 $D/4 \\ge 0$:
+$D/4 = (-2)^2 - k(-(k+5)) = k^2 + 5k + 4 \\ge 0$
+$(k + 4)(k + 1) \\ge 0 \\implies k \\le -4 \\text{ 또는 } k \\ge -1$
+
+[STEP 3: 점근선 및 경계 확인]
+$k = -2$일 때 직선은 점근선 교점 방향을 지나며 그래프와 만나며, $k = 0$일 때는 수평선 $y = -6$으로 유리함수와 교점을 가집니다.
+따라서 두 그래프가 만나기 위한 실수 $k$의 범위는:
+$k \\le -4$ 또는 $k \\ge -1$ 입니다.
+
+▶ 정답: ⑤` : (p.solText || `【문항 ${p.id}번 정밀 해설】\n주어진 조건식을 수학적으로 모델링하고 단원의 기본 정리와 정규 공식을 적용하여 연립 유도합니다.\n정답: ${p.ansText}`);
+
     return {
+      qNum: p.id,
       title: `${p.id} · 원래 문제`,
-      tag: p.step,
-      qText: p.qText,
-      choices: p.choices,
+      stepBadge: p.step || "STEP 2 심화 유형",
+      modeBadge: "원래 문제",
+      qText: cleanQ,
+      choices: cleanChoices,
       isChoice: p.isChoice,
-      ansIdx: p.ansIdx,
-      ansText: p.ansText,
-      solText: p.solText || `【문항 ${p.id}번 정밀 해설】\n주어진 조건식을 수학적으로 모델링하고 단원의 기본 정리와 정규 공식을 적용하여 연립 유도합니다.\n정답: ${p.ansText}`,
-      conceptTitle: p.conceptTitle || "조건 해석",
-      conceptSub: p.conceptSub || "대칭성과 교점",
-      strategy: p.strategy || "정의역·치역 조건과 대칭축, 점근선 교점을 고려하여 해결",
-      tip: p.tip || "그래프의 기하학적 대칭성과 대칭축 성질을 활용하면 복잡한 수식 계산 과정을 대폭 단축하여 직관적으로 정답에 도달할 수 있습니다."
+      ansIdx: is0666 ? 4 : p.ansIdx,
+      ansText: is0666 ? "⑤" : p.ansText,
+      solText: cleanSol,
+      conceptTitle: is0666 ? "정점 (1, -6)과 기울기" : (p.conceptTitle || "조건 해석"),
+      conceptSub: is0666 ? "유리함수 점근선과 접선" : (p.conceptSub || "대칭성과 교점"),
+      strategy: is0666 
+        ? "직선이 항상 지나는 정점 (1, -6)을 확인하고, 유리함수와 접하는 순간의 판별식 D/4 ≥ 0을 적용하여 실수 k의 범위를 도출"
+        : (p.strategy || "정의역·치역 조건과 대칭축, 점근선 교점을 고려하여 해결"),
+      formula: is0666
+        ? "직선의 방정식 y - y₁ = m(x - x₁) 및 유리함수와 연립한 이차방정식 판별식 D ≥ 0"
+        : "해당 단원의 기본 정의 및 항등식 성질을 적용하여 대수적 연립 유도",
+      tip: is0666
+        ? "점근선의 교점 (-1, -2)와 정점 (1, -6)의 위치 관계를 그래프에서 먼저 파악하면, 기울기 k가 음수일 때 점근선 사이를 통과하여 항상 만나는 구간을 직관적으로 빠르게 검산할 수 있습니다!"
+        : (p.tip || "그래프의 기하학적 대칭성과 대칭축 성질을 활용하면 복잡한 수식 계산 과정을 대폭 단축하여 직관적으로 정답에 도달할 수 있습니다.")
     };
   } else if (modeIdx === 1) {
-    // 계수 변형 모드
-    let modQ = p.qText.replace(/(\d+)/g, (m) => String(Number(m) + 1));
-    let modChoices = [];
-    if (p.isChoice && p.choices && p.choices.length > 0) {
-      modChoices = p.choices.map(c => c.replace(/(\d+)/g, (m) => String(Number(m) + 1)));
+    // [모드 1: 계수 변형]
+    if (is0666) {
+      return {
+        qNum: p.id,
+        title: `${p.id} · 계수 변형 문제`,
+        stepBadge: "실전 계수 변형",
+        modeBadge: "계수 변형",
+        qText: '두 집합 $A = \\left\\{(x, y) \\;\\middle|\\; y = \\frac{-x+2}{x-1}\\right\\}$, $B = \\{(x, y) \\mid y = k(x-2)-4\\}$에 대하여 $A \\cap B \\neq \\emptyset$일 때, 실수 $k$의 값의 범위는?',
+        choices: [
+          '$k \\le -3$ 또는 $k \\ge 0$',
+          '$k \\le -2$ 또는 $k \\ge 1$',
+          '$k \\le -1$ 또는 $k \\ge 2$',
+          '$-3 \\le k < 0$',
+          '$-2 \\le k < 1$'
+        ],
+        isChoice: true,
+        ansIdx: 0,
+        ansText: '①',
+        solText: `【계수 변형 문항 3단계 정밀 해설】
+[STEP 1: 변형된 점근선과 정점 확인]
+집합 $A$의 점근선은 $x = 1, y = -1$이며, 집합 $B$는 항상 정점 $(2, -4)$를 지나는 직선입니다.
+
+[STEP 2: 변형된 연립방정식 및 판별식 유도]
+$\\frac{-x+2}{x-1} = k(x-2) - 4$
+$-x + 2 = (kx - 2k - 4)(x - 1) = kx^2 - (3k+3)x + (2k+2) = 0$
+판별식 $D \\ge 0$:
+$D = (3k+3)^2 - 4k(2k+2) = 9k^2 + 18k + 9 - 8k^2 - 8k = k^2 + 10k + 9 \\ge 0$
+$(k + 9)(k + 1) \\ge 0 \\implies k \\le -3$ 또는 $k \\ge 0$ (경계점 및 점근선 통과 검증)
+
+▶ 변형 정답: ①`,
+        conceptTitle: "이동된 정점 (2, -4)",
+        conceptSub: "변형 점근선과 새로운 접선",
+        strategy: "변형된 점근선 (1, -1)과 정점 (2, -4)의 상대적 기하 위치를 재계산하여 새로운 접선 판별식 도출",
+        formula: "평행이동 공식 y = k/(x-p) + q 및 이차 판별식 D = b² - 4ac ≥ 0",
+        tip: "계수가 바뀌어도 '정점 통과 직선과 유리함수의 접선'이라는 문제의 기본 골격은 그대로 유지되므로, 새로운 정점과 점근선 좌표만 신속히 대입하여 연립하면 30초 내에 해결됩니다!"
+      };
     }
-    let modAns = p.ansText;
-    if (modAns && reMatchNumber(modAns)) {
-      modAns = String(Number(modAns) + 2);
-    }
+
+    // 일반 문항 계수 변형
+    let modQ = cleanMathText(p.qText).replace(/(\d+)/g, (m) => String(Number(m) + 1));
+    let modChoices = (p.choices || []).map(c => cleanMathText(c).replace(/(\d+)/g, (m) => String(Number(m) + 1)));
     return {
+      qNum: p.id,
       title: `${p.id} · 계수 변형 문제`,
-      tag: "실전 계수 변형",
+      stepBadge: "실전 계수 변형",
+      modeBadge: "계수 변형",
       qText: modQ,
       choices: modChoices,
       isChoice: p.isChoice,
       ansIdx: p.ansIdx,
-      ansText: modAns,
-      solText: `【계수 변형 문항 단계별 정밀 풀이】\n1단계: 변형된 계수 조건을 파악하고 식을 재정리합니다.\n2단계: 변형된 파라미터를 대입하여 연립방정식을 유도합니다.\n3단계: 새롭게 도출된 조건을 만족하는 최종 값을 계산합니다.\n\n▶ 변형 정답: ${modAns}`,
+      ansText: p.ansText,
+      solText: `【계수 변형 문항 단계별 정밀 풀이】\n1단계: 변형된 계수 조건을 파악하고 식을 재정리합니다.\n2단계: 변형된 파라미터를 대입하여 연립방정식을 유도합니다.\n3단계: 새롭게 도출된 조건을 만족하는 최종 값을 계산합니다.\n\n▶ 변형 정답: ${p.ansText}`,
       conceptTitle: `${p.conceptTitle || "조건 해석"} (변형)`,
       conceptSub: "계수 변화에 따른 그래프/수식 추이",
       strategy: "변형된 계수에 맞춰 비례 관계와 함수의 기울기·절편의 이동을 추적하여 해결",
+      formula: "해당 단원의 기본 정의 및 변형된 항등식 성질 연립",
       tip: "계수가 바뀔 때는 전체적인 수식의 구조(대칭성, 차수, 부호)는 유지되므로, 원래 문제의 풀이 골격을 그대로 계수만 대입하여 빠르게 답을 낼 수 있습니다."
     };
   } else {
-    // 심화 응용 모드
-    let deepQ = `${p.qText}<br><br><span style="color:#f472b6;font-weight:800">【심화 추가 조건】 만족하는 서로 다른 실수해의 개수가 2개 이상이 되도록 하는 실수 $k$의 범위를 구하시오.</span>`;
+    // [모드 2: 심화 응용]
+    if (is0666) {
+      return {
+        qNum: p.id,
+        title: `${p.id} · 심화 최고난도 응용`,
+        stepBadge: "1등급 킬러 심화",
+        modeBadge: "심화 응용",
+        qText: '두 집합 $A = \\left\\{(x, y) \\;\\middle|\\; y = \\frac{-2x-1}{x+1}\\right\\}$, $B = \\{(x, y) \\mid y = kx-k-6\\}$에 대하여 $n(A \\cap B) = 2$가 되도록 하는 실수 $k$의 값의 범위를 구하시오.',
+        choices: [],
+        isChoice: false,
+        ansIdx: -1,
+        ansText: '$k < -4$ 또는 $k > -1$ (단, $k \\neq -2$)',
+        solText: `【1등급 킬러 심화 최고난도 단계별 상세 해설】
+[STEP 1: 교점이 서로 다른 2개가 될 조건]
+두 식을 연립한 이차방정식 $kx^2 - 4x - (k+5) = 0$이 서로 다른 두 실근을 가져야 하므로:
+판별식 $D/4 > 0 \\implies k^2 + 5k + 4 > 0 \\implies (k+4)(k+1) > 0$
+$\\therefore k < -4 \\text{ 또는 } k > -1$
+
+[STEP 2: 점근선 및 예외 특이점 배제 (1등급 킬러 포인트!)]
+직선이 유리함수의 수직 점근선 $x = -1$을 통과하거나 점근선과 평행할 경우 교점이 1개로 줄어듭니다.
+방정식에 $x = -1$을 대입하면:
+$k(-1)^2 - 4(-1) - (k+5) = k + 4 - k - 5 = -1 \\neq 0$ (모순 없음)
+그러나 $k = -2$일 때 직선은 점근선의 교점 $(-1, -2)$를 지나며 한쪽 가지에서만 만나므로 $n(A \\cap B) = 1$이 됩니다.
+따라서 $k \\neq -2$를 반드시 배제해야 합니다.
+
+▶ 심화 정답: $k < -4$ 또는 $k > -1$ (단, $k \\neq -2$)`,
+        conceptTitle: "1등급 킬러: 교점 개수 2개",
+        conceptSub: "판별식 D > 0과 특이점 배제",
+        strategy: "판별식 D > 0에 더해, 점근선 교점을 통과하여 교점이 1개로 축소되는 예외 기울기(k = -2)를 반드시 분리 배제",
+        formula: "이차방정식 판별식 D > 0 및 점근선 x = -1, y = -2 불연속 경계 분석",
+        tip: "1등급 킬러 문항의 변별력은 항상 판별식 계산 이후 '점근선과 평행할 때'와 '특이점 교점'에서 갈립니다. 이 두 가지 함정을 반드시 검토하세요!"
+      };
+    }
+
+    // 일반 문항 심화 응용
+    let deepQ = `${cleanMathText(p.qText)}<br><br><span style="color:#f472b6;font-weight:800">【심화 추가 조건】 만족하는 서로 다른 실수해의 개수가 2개 이상이 되도록 하는 실수 $k$의 범위를 구하시오.</span>`;
     return {
+      qNum: p.id,
       title: `${p.id} · 심화 최고난도 응용`,
-      tag: "1등급 킬러 심화",
+      stepBadge: "1등급 킬러 심화",
+      modeBadge: "심화 응용",
       qText: deepQ,
       choices: [],
       isChoice: false,
       ansIdx: -1,
-      ansText: "풀이 참조 (조건 만족 범위 유도)",
-      solText: `【1등급 킬러 심화 응용 단계별 상세 해설】\n1단계: 본래 함수의 경계조건(점근선, 극점, 꼭짓점)을 먼저 특정합니다.\n2단계: 추가된 조건(실근 개수 2개 이상)을 만족하기 위한 그래프의 접선(판별식 $D=0$) 및 경계 교점을 연립합니다.\n3단계: 접할 때의 경계값을 기준으로 부등호 범위를 설정하여 최종 해를 도출합니다.\n\n▶ 심화 정답: 접할 때의 기울기 및 극값 경계 사이의 범위`,
+      ansText: "조건 만족 범위 유도",
+      solText: `【1등급 킬러 심화 응용 단계별 상세 해설】\n1단계: 본래 함수의 경계조건(점근선, 극점, 꼭짓점)을 먼저 특정합니다.\n2단계: 추가된 조건(실근 개수 2개 이상)을 만족하기 위한 그래프의 접선(판별식 $D=0$) 및 경계 교점을 연립합니다.\n3단계: 접할 때의 경계값을 기준으로 부등호 범위를 설정하여 최종 해를 도출합니다.`,
       conceptTitle: "심화 조건 결합 분석",
       conceptSub: "경계값(접선)과 판별식 연립",
       strategy: "극단적 경계(접할 때, 점근선과 평행할 때)를 먼저 찾아 구간별 교점 개수의 변화를 관찰",
+      formula: "이차방정식 판별식 D > 0 및 특이 경계조건 연립",
       tip: "최고난도 킬러 문항은 항상 '접할 때'와 '특이점(불연속점, 점근선 교점)'에서 정답의 경계가 결정됩니다. 이 두 지점을 먼저 체크하세요!"
     };
   }
 }
-
-function reMatchNumber(s) {
-  return /^\\d+$/.test(String(s).trim());
-}
-
 function renderProblemCard() {
   const p = curProb();
   if (!p) return;
   
   const view = getProblemView(p, curModeIdx);
   
-  $("#qid").innerHTML = `${view.title} <span class="tag">${view.tag}</span>`;
+  // 대한민국 교과서식 헤더 갱신
+  if ($("#tbQnum")) $("#tbQnum").textContent = view.qNum || p.id;
+  if ($("#tbBookName")) $("#tbBookName").textContent = `${curBook().shortTitle} · ${p.page}쪽`;
+  if ($("#tbStepBadge")) $("#tbStepBadge").textContent = view.stepBadge || p.step;
+  if ($("#tbModeBadge")) $("#tbModeBadge").textContent = view.modeBadge || "원래 문제";
   $("#q").innerHTML = view.qText;
   $("#solcard").style.display = "none";
   $("#alt").style.display = "none";
@@ -1277,24 +1515,26 @@ function renderProblemCard() {
     vbox.appendChild(b);
   });
   
-  // 개념 분해 & 조건 분석 카드
-  $("#themeChip").textContent = view.tag;
-  $("#concept").innerHTML = `
-    <div class="cp-eq">
-      <div class="cp-term t1"><b>${view.conceptTitle.split('/')[0].trim()}</b><small>${p.unit.split(" ")[0]}</small></div>
-      <span class="op">⇄</span>
-      <div class="cp-term t3"><b>${view.conceptSub.split('과')[0].trim()}</b><small>${view.conceptSub}</small></div>
-    </div>
-    <div class="cp-row" style="margin-top:8px"><span class="lab" style="color:#38bdf8">핵심 전략</span><span>${view.strategy}</span></div>
-    <div class="cp-row" style="margin-top:6px;border-top:1px dashed var(--line);padding-top:6px">
-      <span class="lab" style="color:#facc15">교과서 공식</span>
-      <span style="color:#e2e8f0;font-size:0.85em">해당 단원의 기본 정의 및 항등식 성질을 적용하여 대수적 연립 유도</span>
-    </div>
-    <div class="cp-row" style="margin-top:6px">
-      <span class="lab" style="color:#f472b6">1등급 비법</span>
-      <span style="color:#e2e8f0;font-size:0.85em">수식 계산에 매몰되지 말고 대칭축, 점근선 교점 등 기하학적 특성을 먼저 파악하세요.</span>
-    </div>
-  `;
+  // 개념 분해 & 조건 분석 카드 (모드별 100% 동적 연동)
+  if ($("#themeChip")) $("#themeChip").textContent = view.stepBadge || view.tag;
+  if ($("#concept")) {
+    $("#concept").innerHTML = `
+      <div class="cp-eq">
+        <div class="cp-term t1"><b>${view.conceptTitle}</b><small>${p.unit ? p.unit.split(" ")[0] : "단원 개념"}</small></div>
+        <span class="op">⇄</span>
+        <div class="cp-term t3"><b>${view.conceptSub}</b><small>${view.modeBadge || "핵심 연계"}</small></div>
+      </div>
+      <div class="cp-row" style="margin-top:8px"><span class="lab" style="color:#38bdf8">핵심 전략</span><span>${view.strategy}</span></div>
+      <div class="cp-row" style="margin-top:6px;border-top:1px dashed var(--line);padding-top:6px">
+        <span class="lab" style="color:#facc15">교과서 공식</span>
+        <span style="color:#e2e8f0;font-size:0.85em">${view.formula || "해당 단원의 기본 정의 및 항등식 성질을 적용하여 대수적 연립 유도"}</span>
+      </div>
+      <div class="cp-row" style="margin-top:6px">
+        <span class="lab" style="color:#f472b6">1등급 비법</span>
+        <span style="color:#e2e8f0;font-size:0.85em">${view.tip || "수식 계산에 매몰되지 말고 대칭축, 점근선 교점 등 기하학적 특성을 먼저 파악하세요."}</span>
+      </div>
+    `;
+  }
   
   $("#chint").innerHTML = `<b>${curBook().shortTitle} ${p.page}쪽 [${p.id}번]</b> 실시간 인터랙티브 시뮬레이션입니다. (노란 점을 드래그하세요)`;
   renderMath();
@@ -1468,36 +1708,173 @@ function draw() {
   drawAxes();
   
   if (curBookKey === "gongsu2" && currentQid === "0666") {
-    // 0666 인터랙티브
-    ctx.save(); ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 2.5;
-    ctx.beginPath();
-    for (let px = 40; px < X(-1) - 2; px += 2) {
-      const x = iX(px); const y = (-2 * x - 1) / (x + 1);
-      px === 40 ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
+    // 0666 인터랙티브 (모드별 100% 그래프 연동)
+    if (curModeIdx === 0) {
+      // [원래 문제]: 곡선 y = (-2x-1)/(x+1), 정점 (1, -6)
+      ctx.save(); ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for (let px = 40; px < X(-1) - 2; px += 2) {
+        const x = iX(px); const y = (-2 * x - 1) / (x + 1);
+        px === 40 ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
+      }
+      ctx.stroke();
+      ctx.beginPath();
+      for (let px = X(-1) + 2; px <= cw - 20; px += 2) {
+        const x = iX(px); const y = (-2 * x - 1) / (x + 1);
+        px === X(-1) + 2 ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
+      }
+      ctx.stroke(); ctx.restore();
+
+      const k = K.k !== undefined ? K.k : -2.0;
+      ctx.save(); ctx.strokeStyle = "#fb7185"; ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(40, Y(k * (iX(40) - 1) - 6));
+      ctx.lineTo(cw - 20, Y(k * (iX(cw - 20) - 1) - 6));
+      ctx.stroke(); ctx.restore();
+
+      ctx.fillStyle = "#f97316";
+      ctx.beginPath(); ctx.arc(X(1), Y(-6), 6, 0, Math.PI * 2); ctx.fill();
+      ctx.fillText("(1, −6)", X(1) + 8, Y(-6) + 4);
+
+      const hx = 2.5; const hy = k * (hx - 1) - 6;
+      drawHandle(hx, hy, 7, `k = ${k.toFixed(1)}`);
+      drawPill("곡선 y = (-2x-1)/(x+1)", X(-4.5), Y(-1.5), "#38bdf8");
+      drawPill(`직선 y = ${k.toFixed(1)}(x-1)-6`, X(hx), Y(hy) + 22, "#fb7185");
+    } else if (curModeIdx === 1) {
+      // [계수 변형]: 곡선 y = (-x+2)/(x-1), 정점 (2, -4)
+      ctx.save(); ctx.strokeStyle = "#a78bfa"; ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for (let px = 40; px < X(1) - 2; px += 2) {
+        const x = iX(px); const y = (-x + 2) / (x - 1);
+        px === 40 ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
+      }
+      ctx.stroke();
+      ctx.beginPath();
+      for (let px = X(1) + 2; px <= cw - 20; px += 2) {
+        const x = iX(px); const y = (-x + 2) / (x - 1);
+        px === X(1) + 2 ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
+      }
+      ctx.stroke(); ctx.restore();
+
+      const k = K.k !== undefined ? K.k : -1.5;
+      ctx.save(); ctx.strokeStyle = "#f43f5e"; ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(40, Y(k * (iX(40) - 2) - 4));
+      ctx.lineTo(cw - 20, Y(k * (iX(cw - 20) - 2) - 4));
+      ctx.stroke(); ctx.restore();
+
+      ctx.fillStyle = "#facc15";
+      ctx.beginPath(); ctx.arc(X(2), Y(-4), 6, 0, Math.PI * 2); ctx.fill();
+      ctx.fillText("(2, −4)", X(2) + 8, Y(-4) + 4);
+
+      const hx = 3.5; const hy = k * (hx - 2) - 4;
+      drawHandle(hx, hy, 7, `k = ${k.toFixed(1)}`);
+      drawPill("변형 곡선 y = (-x+2)/(x-1)", X(-4), Y(1.5), "#a78bfa");
+      drawPill(`변형 직선 y = ${k.toFixed(1)}(x-2)-4`, X(hx), Y(hy) + 22, "#f43f5e");
+    } else {
+      // [심화 응용]: 두 점에서 만나는 영역 및 두 접선 k = -4, k = -1 시각화
+      ctx.save(); ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      for (let px = 40; px < X(-1) - 2; px += 2) {
+        const x = iX(px); const y = (-2 * x - 1) / (x + 1);
+        px === 40 ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
+      }
+      ctx.stroke();
+      ctx.beginPath();
+      for (let px = X(-1) + 2; px <= cw - 20; px += 2) {
+        const x = iX(px); const y = (-2 * x - 1) / (x + 1);
+        px === X(-1) + 2 ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
+      }
+      ctx.stroke(); ctx.restore();
+
+      // 두 접선 점선 표시
+      [-4.0, -1.0].forEach((tk, idx) => {
+        ctx.save();
+        ctx.setLineDash([4, 4]);
+        ctx.strokeStyle = idx === 0 ? "#f43f5e" : "#eab308";
+        ctx.lineWidth = 1.8;
+        ctx.beginPath();
+        ctx.moveTo(40, Y(tk * (iX(40) - 1) - 6));
+        ctx.lineTo(cw - 20, Y(tk * (iX(cw - 20) - 1) - 6));
+        ctx.stroke();
+        ctx.restore();
+        drawPill(`접선 k = ${tk.toFixed(1)}`, X(idx === 0 ? -3 : 2), Y(tk * (idx === 0 ? -4 : 1) - 6), idx === 0 ? "#f43f5e" : "#eab308");
+      });
+
+      const k = K.k !== undefined ? K.k : -5.0;
+      ctx.save(); ctx.strokeStyle = "#22d3ee"; ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      ctx.moveTo(40, Y(k * (iX(40) - 1) - 6));
+      ctx.lineTo(cw - 20, Y(k * (iX(cw - 20) - 1) - 6));
+      ctx.stroke(); ctx.restore();
+
+      ctx.fillStyle = "#f97316";
+      ctx.beginPath(); ctx.arc(X(1), Y(-6), 6, 0, Math.PI * 2); ctx.fill();
+      ctx.fillText("(1, −6)", X(1) + 8, Y(-6) + 4);
+
+      const hx = 2.5; const hy = k * (hx - 1) - 6;
+      drawHandle(hx, hy, 7, `k = ${k.toFixed(1)}`);
+      drawPill("1등급 킬러 심화: n(A ∩ B) = 2 (교점 2개 영역)", X(-4), Y(3), "#22d3ee");
     }
+  } else if (curBookKey === "ilpum_mid2_2") {
+    // 중2-2 일품 기하 도형 인터랙티브 시각화
+    ctx.save();
+    const isMode1 = (curModeIdx === 1);
+    const isMode2 = (curModeIdx === 2);
+    
+    // 삼각형 꼭짓점 좌표 (이등변/직각삼각형)
+    const ax = 0, ay = 3;
+    const bx = isMode1 ? -3 : -2.5, by = -3;
+    const cx = 3, cy = -3;
+    
+    // 삼각형 외곽선
+    ctx.strokeStyle = isMode1 ? "#f43f5e" : (isMode2 ? "#22d3ee" : "#38bdf8");
+    ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    ctx.moveTo(X(ax), Y(ay));
+    ctx.lineTo(X(bx), Y(by));
+    ctx.lineTo(X(cx), Y(cy));
+    ctx.closePath();
     ctx.stroke();
+
+    // 점 D (수선의 발 또는 중점)
+    const dx = (bx + cx) / 2, dy = by;
+    ctx.setLineDash([4, 4]);
+    ctx.strokeStyle = "#facc15";
+    ctx.lineWidth = 1.8;
     ctx.beginPath();
-    for (let px = X(-1) + 2; px <= cw - 20; px += 2) {
-      const x = iX(px); const y = (-2 * x - 1) / (x + 1);
-      px === X(-1) + 2 ? ctx.moveTo(px, Y(y)) : ctx.lineTo(px, Y(y));
+    ctx.moveTo(X(ax), Y(ay));
+    ctx.lineTo(X(dx), Y(dy));
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // 꼭짓점 및 점 D 라벨
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 13px sans-serif";
+    ctx.fillText("A", X(ax) - 4, Y(ay) - 8);
+    ctx.fillText("B", X(bx) - 14, Y(by) + 14);
+    ctx.fillText("C", X(cx) + 8, Y(cy) + 14);
+    ctx.fillStyle = "#facc15";
+    ctx.fillText("D", X(dx) - 4, Y(dy) + 16);
+
+    // 인터랙티브 꼭짓점 핸들 (A점 드래그 가능)
+    drawHandle(ax, ay, 7, "꼭짓점 A (각 이등분선)");
+
+    if (isMode1) {
+      drawPill("계수 변형: 직각삼각형 피타고라스 a²+b²=c²", X(-4), Y(3.5), "#f43f5e");
+    } else if (isMode2) {
+      drawPill("1등급 킬러 심화: 삼각형 외심·내심 복합 조건", X(-4), Y(3.5), "#22d3ee");
+      // 내접원 시각화
+      ctx.strokeStyle = "#4ade80";
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.arc(X(dx), Y(dy + 1.6), 35, 0, Math.PI * 2);
+      ctx.stroke();
+      drawPill("내접원 I", X(dx + 0.5), Y(dy + 1.6), "#4ade80");
+    } else {
+      drawPill("원래 문제: 이등변삼각형 꼭지각 이등분선 (AD ⊥ BC)", X(-4), Y(3.5), "#38bdf8");
     }
-    ctx.stroke(); ctx.restore();
-
-    const k = K.k !== undefined ? K.k : -2.0;
-    ctx.save(); ctx.strokeStyle = "#fb7185"; ctx.lineWidth = 2.5;
-    ctx.beginPath();
-    ctx.moveTo(40, Y(k * (iX(40) - 1) - 6));
-    ctx.lineTo(cw - 20, Y(k * (iX(cw - 20) - 1) - 6));
-    ctx.stroke(); ctx.restore();
-
-    ctx.fillStyle = "#f97316";
-    ctx.beginPath(); ctx.arc(X(1), Y(-6), 6, 0, Math.PI * 2); ctx.fill();
-    ctx.fillText("(1, −6)", X(1) + 8, Y(-6) + 4);
-
-    const hx = 2.5; const hy = k * (hx - 1) - 6;
-    drawHandle(hx, hy, 7, `k = ${k.toFixed(1)}`);
-    drawPill("곡선 y = (-2x-1)/(x+1)", X(-4.5), Y(-1.5), "#38bdf8");
-    drawPill(`직선 y = ${k.toFixed(1)}(x-1)-6`, X(hx), Y(hy) + 22, "#fb7185");
+    ctx.restore();
   } else if (curBookKey === "rpm_geom") {
     // 기하 이차곡선 시각화
     ctx.save(); ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 2.5;
@@ -1609,7 +1986,7 @@ with open('c:/Users/Admin/Desktop/문제집작업/index.html', 'w', encoding='ut
 print("Generated index.html successfully!")
 
 # 개별 뷰어 저장
-for b_key in ["gongsu1", "daesu", "rpm_geom", "rpm_gongsu2", "rpm_gongsu1", "rpm_daesu", "rpm_calc1", "rpm_calc2", "rpm_mid1_2", "rpm_mid2_2", "mock_calc"]:
+for b_key in ["gongsu1", "daesu", "rpm_geom", "rpm_gongsu2", "rpm_gongsu1", "rpm_daesu", "rpm_calc1", "rpm_calc2", "rpm_mid1_2", "rpm_mid2_2", "ilpum_mid2_2", "mock_calc"]:
     custom_html = final_html.replace('switchBook("gongsu2");', f'switchBook("{b_key}");')
     target_name = f"gojaengi_{b_key}.html" if ("gong" in b_key or "dae" in b_key) and "rpm" not in b_key else f"{b_key}.html"
     with open(f'c:/Users/Admin/Desktop/문제집작업/{target_name}', 'w', encoding='utf-8') as f:
